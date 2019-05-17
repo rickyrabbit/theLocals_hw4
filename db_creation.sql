@@ -1,6 +1,6 @@
 
 -- Database Creation
-CREATE SCHEMA localProductions OWNER POSTGRES ENCODING = 'UTF8';
+CREATE DATABASE localProductions OWNER POSTGRES ENCODING = 'UTF8';
 
 
 -- Connect to thelocals db to create data for its 'public' schema

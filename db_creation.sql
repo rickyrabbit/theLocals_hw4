@@ -4,7 +4,7 @@ CREATE DATABASE localProductions OWNER POSTGRES ENCODING = 'UTF8';
 
 
 -- Connect to thelocals db to create data for its 'public' schema
-\c localProductions
+\c localproductions --con la P maiuscola ritorna errore evidentemente in riga 3 non è case sensitive mentre qui sì.
 
 
 -- TODO: check if we new to add DOMAIN line 13 db_creation.sql
@@ -32,27 +32,16 @@ COMMENT ON DOMAIN passwordD IS 'alphanumeric passwordD domain, max 254 character
 
 
 -- Create new data type
-CREATE TYPE role_type AS ENUM(
-    'Restaurateur'
-    'Regional Manager'
-    'Event Organizer'
-    'Customer'
-    'Producer'
-);
+--la precedente sintassi era sbagliata
+CREATE TYPE role_type AS ENUM('Restaurateur','Regional Manager','Event Organizer','Customer','Producer');
 COMMENT ON TYPE role_type IS 'enum for role types';
 
-CREATE TYPE order_type AS ENUM(
-    'Reserved'
-    'Completed'
-    'Canceled'
-);
+CREATE TYPE order_type AS ENUM('Reserved','Completed','Canceled');
 COMMENT ON TYPE order_type IS 'enum for order types';
 
-CREATE TYPE channel_type AS ENUM(
-    'Pay In store'
-    'Cash On delivery'
-);
+CREATE TYPE channel_type AS ENUM('Pay In store','Cash On delivery');
 COMMENT ON TYPE  channel_type IS 'enum for sales channel types';
+
 
 
 
@@ -125,15 +114,15 @@ CREATE TABLE End_User(
     role role_type NOT NULL,
     tax_code text,
     PRIMARY KEY (email),
-    CONSTRAinteger constr_validation CHECK(--Constainteger 1
+    CONSTRAINT constr_validation CHECK(--Constaint 1 errore di battitura
         (role = 'Producer' AND validated IS NOT NULL) OR (role = 'Event Organizer' AND validated IS NOT NULL)
-    )
-    CONSTRAinteger constr_tax_code CHECK(-- Constrainteger 2
+    ), --mancavano le virgole
+    CONSTRAINT constr_tax_code CHECK(-- Constraint 2
         (role = 'Producer' AND tax_code IS NOT NULL) OR (role = 'Restaurateur' AND tax_code IS NOT NULL)
-    )
-    CONSTRAinteger constr_organization CHECK(--Constainteger 3
+    ),
+    CONSTRAINT constr_organization CHECK(--Constaint 3
         (role = 'Event Organizer' AND organization IS NOT NULL)
-    )
+    ),
 );
 COMMENT ON TABLE End_User IS 'Every end user who has registered in the database';
 
@@ -173,7 +162,7 @@ CREATE TABLE Producer(
     FOREIGN KEY (email) REFERENCES End_User(email),
     FOREIGN KEY (region_name) REFERENCES Region(name)
 );
-COMMENT ON TABLE Producer IS 'local producer of foodstuff'
+COMMENT ON TABLE Producer IS 'local producer of foodstuff'; -- punto e virgola
 
 CREATE TABLE Review(
     email emailD,
@@ -238,13 +227,13 @@ CREATE TABLE Make(
     FOREIGN KEY (order_id) REFERENCES Orders(order_id),
     FOREIGN KEY (type) REFERENCES Sales_Channel(type),
     FOREIGN KEY (customer_email) REFERENCES End_User(email),
-    FOREIGN KEY (producer_email) REFERENCES Producer(email),
+    FOREIGN KEY (producer_email) REFERENCES Producer(email) --virgola in più
 );
 COMMENT ON TABLE Make IS 'List of orders made by users of role_type "costumer" from "producers"';
 
 CREATE TABLE Sell(
     email emailD,
-    product_code text NOT NULL,
+    product_code integer NOT NULL, --si riferisce a un datatype serial quindi va messo come integer
     price money NOT NULL,
     stock integer NOT NULL,
     image bytea, -- TODO: Check if correct
@@ -278,7 +267,7 @@ CREATE TABLE Belong1(
 COMMENT ON TABLE Belong1 IS 'List of categories a "producer" belongs to';
 
 CREATE TABLE Sales_Through(
-    type text,
+    type channel_type, --Le colonne chiave "type" e "type" avevano tipi incompatibili: text e channel_type
     email emailD,
     PRIMARY KEY (type, email),
     FOREIGN KEY (type) REFERENCES Sales_Channel(type),

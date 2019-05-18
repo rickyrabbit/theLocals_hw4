@@ -114,15 +114,17 @@ CREATE TABLE End_User(
     role role_type NOT NULL,
     tax_code text,
     PRIMARY KEY (email),
-    CONSTRAINT constr_validation CHECK(--Constaint 1 errore di battitura
-        (role = 'Producer' AND validated IS NOT NULL) OR (role = 'Event Organizer' AND validated IS NOT NULL)
-    ), --mancavano le virgole
-    CONSTRAINT constr_tax_code CHECK(-- Constraint 2
-        (role = 'Producer' AND tax_code IS NOT NULL) OR (role = 'Restaurateur' AND tax_code IS NOT NULL)
+    CONSTRAINT constr_validation CHECK(--Constaint 1 
+        (role = 'Producer' AND validated IS NOT NULL) OR (role = 'Event Organizer' AND validated IS NOT NULL) OR
+        (role != 'Producer' AND validated IS NULL) OR (role != 'Event Organizer' AND validated IS NULL)
+    ),
+    CONSTRAINT constr_tax_code CHECK(--Constaint 2
+        (role = 'Producer' AND tax_code IS NOT NULL) OR (role = 'Restaurateur' AND tax_code IS NOT NULL) OR
+        (role != 'Producer' AND tax_code IS NULL) OR (role != 'Restaurateur' AND tax_code IS NULL)
     ),
     CONSTRAINT constr_organization CHECK(--Constaint 3
-        (role = 'Event Organizer' AND organization IS NOT NULL)
-    ),
+        (role = 'Event Organizer' AND organization IS NOT NULL) OR (role != 'Event Organizer' AND organization IS NULL)
+    )
 );
 COMMENT ON TABLE End_User IS 'Every end user who has registered in the database';
 

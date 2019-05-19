@@ -103,3 +103,26 @@ INSERT INTO Review(email, product_code, score, content, review_timestamp) VALUES
 ('Salvatore.Aloia@gmail.com', 3, 5, 'Ottima qualità di carne, riacquisterò sicuramente in futuro.', '1558782126'),
 ('Settimo.Albanesi@gmail.com', 11, 5, 'Asiago perfetto.', '1558782126'),
 ('Nicola.Abelli@gmail.com', 12, 1, 'Chiocciole arrivare troppo vecchie, le ho buttate.', '1558782126');
+
+INSERT INTO Restaurant(name, email, location, description, images, telephone_number, region_name) VALUES
+('Le calandre', 'lecalandre@gmail.com', 'Padova', 'Traditional Italian restaurant', NULL, '0490000', 'Veneto'),
+('Da Orazio', 'daorazio@gmail.com', 'Treviso', 'Seafood restaurant', NULL, '04221000', 'Veneto'),
+('Da Luisa', 'daluisa@gmail.com', 'Venezia', 'Trattoria', NULL, '346013406', 'Veneto'),
+('Da Pino', 'dapino@gmail.com', 'Verona', 'Pizzeria', NULL, '346713406', 'Veneto');
+
+INSERT INTO Own(restaurant_id, email) VALUES
+(1, 'Giovanni.Aquila@gmail.com'),
+(2,'Orazio.Gatti@gmail.com'),
+(3,'Luisa.Ferrara@gmail.com'),
+(4, 'Enzo.Tumicelli@gmail.com');
+
+INSERT INTO Offer(restaurant_id, product_code) VALUES
+(1, 3),
+(1,4),
+(2,13),
+(2,15),
+(3,1),
+(4,10);
+
+ 
+

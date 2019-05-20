@@ -29,9 +29,6 @@ INSERT INTO Category (category_id, name, description) VALUES
 ('A11', 'Birra','Produzione, lavorazione e vendita di: BIRRA '),
 ('A12', 'Aceti','Produzione, lavorazione e vendita di: ACETI');
 
-INSERT INTO Restaurant (restaurant_id, name, email, location, description, images, telephone_number, region_name) VALUES
-
-);
 
 --:TODO psw must be in md5
 INSERT INTO End_User (email, password, first_name, last_name, validated, organization, role, tax_code) VALUES

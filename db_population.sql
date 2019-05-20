@@ -56,6 +56,20 @@ INSERT INTO End_User (email, password, first_name, last_name, validated, organiz
 ('Gualberto.Alescio@gmail.com','12345','Gualberto','Alescio',TRUE,NULL,'Producer','LSCGBR80P11H501P'),
 ('Beatrice.Altoviti@gmail.com','12345','Beatrice','Altoviti ',TRUE,NULL,'Producer','LTVBRC80M48G224W');
 
+INSERT INTO Producer (email, pec, activity_description , location, telephone_number , business_name , vat_number text NOT NULL, region_name ) VALUES
+('Tatiana.Agnelli@gmail.com','Tatiana.Agnelli@legalmail.it','Allevamento di maiali e produzione propria di salumi','Conegliano','3923085842','Le carni di Tatiana','01906530983','Veneto'),
+('Angelo.Antonini@gmail.com','Angelo.Antonini@legalmail.it','Produzione di olio dei Colli Euganei','Cinto Euganeo','0429634030','Sapori dei Colli','01835500940','Veneto'),
+('Gualberto.Alescio@gmail.com','Gualberto.Alescio@legalmail.it','Piccolo allevamento di conigli','Padova','0496588741','Allevamento Alescio','02976538413','Veneto'),
+('Beatrice.Altoviti@gmail.com','Beatrice.Altoviti@legalmail.it','Produzione di confetture','Asiago','0424461475','Le confetture di Bea','01984568450','Veneto');
+
+INSERT INTO Belong1 (email, category_id ) VALUES
+('Tatiana.Agnelli@gmail.com','A1')
+('Angelo.Antonini@gmail.com','A6')
+('Gualberto.Alescio@gmail.com','A2')
+('Beatrice.Altoviti@gmail.com','A4');
+
+
+
 INSERT INTO Orders (order_id, total_price, order_timestamp, order_status) VALUES
     
 );
@@ -83,7 +97,7 @@ INSERT INTO Product (name, general_description, category_id) VALUES
 ('Gallina Padovana', 'Razza riconosciuta come "pura" da uno standard nazionale redatto dalla Federazione Italiana delle razze avicole.', 'A2'),
 ('Coniglio Veneto', 'Anticamente l’allevamento del coniglio costituiva la forma di reddito integrativo per le famiglie della mezzadria veneta.', 'A2'),
 ('Miele delle Dolomiti Bellunesi D.O.P.', 'Miele prodotto a partire dal nettare dei fiori del territorio montano bellunese, dall’ecotipo locale di “Apis mellifera.”', 'A3'),
-('Confettura di Mirtillo e Mela della Valtellina', 'Esistono numerosi tipi di marmellate e confetture tipiche delle diverse zone del Veneto dovute alla ricca produzione di frutta.', 'A4'),
+('Confettura di Mirtillo e Mela della Altopiano di Asiago', 'Esistono numerosi tipi di marmellate e confetture tipiche delle diverse zone del Veneto dovute alla ricca produzione di frutta.', 'A4'),
 ('Confettura di Ciliegia di Marostica I.G.P.', 'Esistono numerosi tipi di marmellate e confetture tipiche delle diverse zone del Veneto dovute alla ricca produzione di frutta.', 'A4'),
 ('Panada Veneta', 'Pancotto aromatizzato alla cannella.', 'A5'),
 ('Sopa Coada', 'Zuppa gratinata composta di strati di pane raffermo e piccione', 'A5'),
@@ -94,6 +108,14 @@ INSERT INTO Product (name, general_description, category_id) VALUES
 ('Bigoli Veneti', 'Ottima pasta da abbinare con il ragù d''anatra.', 'A10'),
 ('Birra di Rovigo D.O.P.', 'La birra artigianale è un prodotto non pastorizzato e non filtrato.', 'A11'),
 ('Aceto di Vino Euganeo', 'Aceto tipico dei Colli Euganei.', 'A12');
+
+INSERT INTO Sell(email , product_code , price, stock , image ,  producer_description ) VALUES
+('Tatiana.Agnelli@gmail.com',1,'12.05',7,NULL,'Soppressa Vicentina D.O.P di coppa e spalla aromatizata con rosmarino.800gr '),
+('Tatiana.Agnelli@gmail.com',2,'8.10',10,NULL,'Cappa di testa tradizionale estense aromatizzata al timo.900gr'),
+('Angelo.Antonini@gmail.com',10,'14.20',5,NULL,'Olio dei Colli Euganei spremuto a freddo,dal retrogusto piccante.1L'),
+('Gualberto.Alescio@gmail.com',4,'12.30',37,NULL,'Coniglio intero allevato all''aperto.1800gr'),
+('Beatrice.Altoviti@gmail.com',6,'3.60',40,NULL,'Confettura di Mirtillo e Mela di coltivazioni secolari presenti nell'' Altopiano.600gr'),
+('Beatrice.Altoviti@gmail.com',7,'2.50',38,NULL,'Deliziosa confettura della rinomata Ciliegia di Marostica,famosa per il suo gusto caramelloso.550gr');
 
 
 INSERT INTO Review(email, product_code, score, content, review_timestamp) VALUES
@@ -123,6 +145,3 @@ INSERT INTO Offer(restaurant_id, product_code) VALUES
 (2,15),
 (3,1),
 (4,10);
-
- 
-

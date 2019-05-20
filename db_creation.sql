@@ -132,7 +132,7 @@ COMMENT ON TABLE End_User IS 'Every end user who has registered in the database'
 CREATE TABLE Orders(
     order_id SERIAL,
     total_price money NOT NULL,--TODO: 
-	order_timestamp timestamp NOT NULL,
+	order_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
 	order_status order_type NOT NULL,
     PRIMARY KEY (order_id),
     FOREIGN KEY (order_status) REFERENCES Status(status) 
@@ -172,7 +172,7 @@ CREATE TABLE Review(
     product_code INT,
     score reviewScoreD,
     content text,
-    review_timestamp timestamp NOT NULL,
+    review_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
     PRIMARY KEY (email, product_code),
     FOREIGN KEY (email) REFERENCES End_User(email),
     FOREIGN KEY (product_code) REFERENCES Product(product_code)

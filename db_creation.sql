@@ -2,10 +2,8 @@
 -- Database Creation
 CREATE DATABASE localProductions OWNER POSTGRES ENCODING = 'UTF8';
 
-
 -- Connect to thelocals db to create data for its 'public' schema
 \c localproductions --con la P maiuscola ritorna errore evidentemente in riga 3 non è case sensitive mentre qui sì.
-
 
 -- TODO: check if we new to add DOMAIN line 13 db_creation.sql
 

@@ -69,7 +69,7 @@ INSERT INTO Belong1 (email, category_id ) VALUES
 ('Beatrice.Altoviti@gmail.com','A4');
 
 
-
+-- FARE GLI ORDINI PRIMA DEL 5 maggio
 INSERT INTO Orders (order_id, total_price, order_timestamp, order_status) VALUES
     
 );
@@ -117,12 +117,12 @@ INSERT INTO Sell(email , product_code , price, stock, image,  producer_descripti
 ('Beatrice.Altoviti@gmail.com', 7, '2.50', 38, NULL, 'Deliziosa confettura della rinomata Ciliegia di Marostica,famosa per il suo gusto caramelloso.550gr');
 
 INSERT INTO Review(email, product_code, score, content, review_timestamp) VALUES
-('Evelina.Piazza@gmail.com', 1, 5, 'Sopressa di ottima fattura, con un buon rapporto qualità/prezzo.', '1558782126'),
-('Gianpaolo.Abano@gmail.com', 5, 4, 'Miele molto buono, forse un po'' troppo caro.', '1558782126'),
-('Gianpaolo.Abano@gmail.com', 7, 3, 'Marmellata un po'' troppo dolce, accettabile per il prezzo.', '1558782126'),
-('Gualtiero.Aldebrandi@gmail.com', 3, 5, 'Ottima qualità di carne, riacquisterò sicuramente in futuro.', '1558782126'),
-('Nicola.Abelli@gmail.com', 11, 5, 'Asiago perfetto.', '1558782126'),
-('Nicola.Abelli@gmail.com', 12, 1, 'Chiocciole arrivare troppo vecchie, le ho buttate.', '1558782126');
+('Evelina.Piazza@gmail.com', 1, 5, 'Sopressa di ottima fattura, con un buon rapporto qualità/prezzo.', '2019-05-10 11:23:54+02'),
+('Gianpaolo.Abano@gmail.com', 5, 4, 'Miele molto buono, forse un po'' troppo caro.', '2019-05-13 10:23:54+02'),
+('Gianpaolo.Abano@gmail.com', 7, 3, 'Marmellata un po'' troppo dolce, accettabile per il prezzo.', '2019-05-15 12:23:54+02'),
+('Gualtiero.Aldebrandi@gmail.com', 3, 5, 'Ottima qualità di carne, riacquisterò sicuramente in futuro.', '2019-05-16 10:43:54+02'),
+('Nicola.Abelli@gmail.com', 11, 5, 'Asiago perfetto.', '2019-05-18 10:23:54+02'),
+('Nicola.Abelli@gmail.com', 12, 1, 'Chiocciole arrivare troppo vecchie, le ho buttate.', '2019-05-19 09:29:54+02');
 
 INSERT INTO Restaurant(name, email, location, description, images, telephone_number, region_name) VALUES
 ('Le calandre', 'lecalandre@gmail.com', 'Padova', 'Traditional Italian restaurant', NULL, '0490000', 'Veneto'),

@@ -270,12 +270,12 @@ CREATE TABLE Belong1(
 );
 COMMENT ON TABLE Belong1 IS 'List of categories a "producer" belongs to';
 
-CREATE TABLE Sales_Through(
+CREATE TABLE Sale_Through(
     type channel_type, --Le colonne chiave "type" e "type" avevano tipi incompatibili: text e channel_type
     email emailD,
     PRIMARY KEY (type, email),
     FOREIGN KEY (type) REFERENCES Sales_Channel(type),
     FOREIGN KEY (email) REFERENCES Producer(email)
 );
-COMMENT ON TABLE Sales_Through IS 'List of sales channels provided by each "producer"';
+COMMENT ON TABLE Sale_Through IS 'List of sales channels provided by each "producer"';
 -- TO DO TRIGGER!

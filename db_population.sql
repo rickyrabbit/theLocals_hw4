@@ -1,5 +1,5 @@
 -- Connect to thelocals db to create data for its 'public' schema
-\c localProductions
+\c localproductions
 
 -- Insert operations
 

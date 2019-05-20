@@ -2,10 +2,8 @@
 -- Database Creation
 CREATE DATABASE localProductions OWNER POSTGRES ENCODING = 'UTF8';
 
-
 -- Connect to thelocals db to create data for its 'public' schema
 \c localproductions --con la P maiuscola ritorna errore evidentemente in riga 3 non è case sensitive mentre qui sì.
-
 
 -- TODO: check if we new to add DOMAIN line 13 db_creation.sql
 
@@ -25,7 +23,7 @@ COMMENT ON DOMAIN emailD IS 'alphanumeric emailD domain';
 -- CREATE DOMAIN name_type AS VARCHAR()
 
 CREATE DOMAIN passwordD AS character varying(254)
-	CONSTRAINT integer properpassword CHECK (((VALUE)::text ~* '[A-Za-z0-9._%-]{5,}'::text));
+	CONSTRAINT INT properpassword CHECK (((VALUE)::text ~* '[A-Za-z0-9._%-]{5,}'::text));
 COMMENT ON DOMAIN passwordD IS 'alphanumeric passwordD domain, max 254 characters';
 
 CREATE DOMAIN reviewScoreD AS SMALLINT NOT NULL
@@ -143,9 +141,9 @@ COMMENT ON TABLE Orders IS 'Summary of an order';
 
 
 CREATE TABLE Contain(
-    order_id integer,
-    product_code integer,
-    quantity integer NOT NULL,
+    order_id INT,
+    product_code INT,
+    quantity INT NOT NULL,
     price money NOT NULL,
     PRIMARY KEY (order_id, product_code),
     FOREIGN KEY (order_id) REFERENCES Orders(order_id),
@@ -207,8 +205,8 @@ CREATE TABLE Manage(
 COMMENT ON TABLE Manage IS 'Set of regions which a user of role_type "regional manager" is assigned to';
 
 CREATE TABLE Offer(
-    restaurant_id integer,
-    product_code integer,
+    restaurant_id INT,
+    product_code INT,
     PRIMARY KEY (restaurant_id, product_code),
     FOREIGN KEY (restaurant_id) REFERENCES Restaurant(restaurant_id),
     FOREIGN KEY (product_code) REFERENCES Product(product_code)
@@ -216,7 +214,7 @@ CREATE TABLE Offer(
 COMMENT ON TABLE Offer IS 'List of local products that a restaurant offers in its menu';
 
 CREATE TABLE Own(
-    restaurant_id integer,
+    restaurant_id INT,
     email emailD,
     PRIMARY KEY (restaurant_id,email),
     FOREIGN KEY (restaurant_id) REFERENCES Restaurant(restaurant_id),
@@ -225,7 +223,7 @@ CREATE TABLE Own(
 COMMENT ON TABLE Own IS 'Restaurant owned by an user of role_type "restaurateur"';
 
 CREATE TABLE Make(
-    order_id integer,
+    order_id INT,
     type channel_type,
     customer_email emailD,
     producer_email emailD,
@@ -239,9 +237,9 @@ COMMENT ON TABLE Make IS 'List of orders made by users of role_type "costumer" f
 
 CREATE TABLE Sell(
     email emailD,
-    product_code integer NOT NULL, --si riferisce a un datatype serial quindi va messo come integer
+    product_code INT NOT NULL, --si riferisce a un datatype serial quindi va messo come INT
     price money NOT NULL,
-    stock integer NOT NULL,
+    stock INT NOT NULL,
     image bytea, -- TODO: Check if correct
     producer_description text,
     PRIMARY KEY (email, product_code),
@@ -253,8 +251,8 @@ COMMENT ON TABLE Sell IS '';
 
 CREATE TABLE Promote(
     email emailD,
-    product_code integer,
-    event_id integer,
+    product_code INT,
+    event_id INT,
     PRIMARY KEY (email, product_code, event_id),
     FOREIGN KEY (email) REFERENCES End_User(email),
     FOREIGN KEY (product_code) REFERENCES Product(product_code),

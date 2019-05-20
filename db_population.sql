@@ -29,6 +29,7 @@ INSERT INTO Category (category_id, name, description) VALUES
 ('A11', 'Birra','Produzione, lavorazione e vendita di: BIRRA '),
 ('A12', 'Aceti','Produzione, lavorazione e vendita di: ACETI');
 
+
 INSERT INTO Restaurant (restaurant_id, name, email, location, description, images, telephone_number, region_name) VALUES
 
 );

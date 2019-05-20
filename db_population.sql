@@ -145,3 +145,10 @@ INSERT INTO Offer(restaurant_id, product_code) VALUES
 (2,15),
 (3,1),
 (4,10);
+
+INSERT INTO Event(name, location, date_range, description, email, region_name) VALUES
+('Festa di Primavera','Via Casoni, 31057 Casale sul Sile (TV)','[2019-03-20,2019-03-23]','Musica, vino e artigianato, tutti i giorni dalle 20 alle 23','Antonio.Como@gmail.com','Veneto'),
+('In Vino Veritas','Prato della Valle, 35123 Padova (PD)','[2019-09-15,2019-09-20]','Gustate i vini dei colli, tutti i giorni dalle 10 alle 23','Settimo.Albanesi@gmail.com','Veneto'),
+('Orto in Tavola','Piazza IV Novembre, 06100 Perugia (PG)','[2019-06-10,2019-06-20]','Le migliori produzioni locali in piazza, tutti i giorni dalle 10 alle 22','Fioralba.Murgia@gmail.com','Umbria'),
+('Festa della tagliata','Piazza della Biade, 36100 Vicenza (VI)','[2019-07-01,2019-07-05]','Carne di qualità tutte le sere dalle 19 alle 00','Antonio.Como@gmail.com','Veneto'),
+('Festa del Pane','Piazza del Duomo, 56126 Pisa (PI)','[2019-06-25,2019-06-30]','Cibo e musica tutte le sere dalle 19 alle 23','Michelina.Corti@gmail.com','Toscana');

@@ -19,7 +19,6 @@ CREATE DATABASE localProductions OWNER POSTGRES ENCODING = 'UTF8';
 --COMMENT ON DOMAIN identifier IS 'alphanumeric identifier domain, max 20 chars';
 
 
-
 CREATE DOMAIN emailD AS text --TODO: check how to write email domains
     NOT NULL;
 COMMENT ON DOMAIN emailD IS 'alphanumeric emailD domain';
@@ -29,7 +28,7 @@ CREATE DOMAIN passwordD AS character varying(254)
 	CONSTRAINT integer properpassword CHECK (((VALUE)::text ~* '[A-Za-z0-9._%-]{5,}'::text));
 COMMENT ON DOMAIN passwordD IS 'alphanumeric passwordD domain, max 254 characters';
 
-CREATE DOMAIN reviewScoreD AS SMALLINT
+CREATE DOMAIN reviewScoreD AS SMALLINT NOT NULL
     CONSTRAINT CHECK (VALUE >= 1 AND VALUE <= 5);
 COMMENT ON DOMAIN reviewScoreD IS 'A review score can be an int between 1 and 5';
 
@@ -173,7 +172,7 @@ COMMENT ON TABLE Producer IS 'local producer of foodstuff'; -- punto e virgola
 CREATE TABLE Review(
     email emailD,
     product_code INT,
-    score SMALLINT NOT NULL,
+    score reviewScoreD,
     content text,
     review_timestamp timestamp NOT NULL,
     PRIMARY KEY (email, product_code),

@@ -3,19 +3,19 @@
 
 -- Insert operations
 
-INSERT INTO Region (name) VALUES 
+INSERT INTO Region(name) VALUES 
 ('Piemonte'), ('Valle d''Aosta'), ('Lombardia'), ('Trentino-Alto Adige'), ('Veneto'), ('Friuli-Venezia Giulia'), ('Liguria'), ('Emilia-Romagna'), ('Toscana'), ('Umbria'), ('Marche'), ('Lazio'), ('Abruzzo'), ('Molise'), ('Campania'), ('Puglia'), ('Basilicata'), ('Calabria'), ('Sicilia'), ('Sardegna');
 
-INSERT INTO Role (role) VALUES  -- mi restituiva ERRORE:  la colonna "role_type" della relazione "role" non esiste
+INSERT INTO Role(role) VALUES  -- mi restituiva ERRORE:  la colonna "role_type" della relazione "role" non esiste
 ('Restaurateur'), ('Regional Manager'), ('Event Organizer'), ('Customer'), ('Producer');
 
-INSERT INTO TABLE Sales_Channel (type) VALUES
+INSERT INTO TABLE Sales_Channel(type) VALUES
 ('Pay In store'), ('Cash On delivery');
 
 INSERT INTO Status(status) VALUES
 ('Reserved'), ('Completed'), ('Canceled');
 
-INSERT INTO Category (category_id, name, description) VALUES
+INSERT INTO Category(category_id, name, description) VALUES
 ('A1', 'Carne Rossa', 'Lavorazione di carni di ungulati domestici o selvatici per produzione e vendita di prodotti a base di carne'),
 ('A2', 'Carne Bianca', 'Macellazione e vendita carni di volatili da cortile, conigli, piccola selvaggina allevata o selvatica.'),
 ('A3', 'Miele', 'Produzione e vendita di MIELE, prodotti dolciari a base di miele con frutta secca o propoli; pappa reale o gelatina reale; polline; idromele; aceto di miele'),
@@ -31,35 +31,35 @@ INSERT INTO Category (category_id, name, description) VALUES
 
 
 --:TODO psw must be in md5
-INSERT INTO End_User (email, password, first_name, last_name, validated, organization, role, tax_code) VALUES
-('Giovanni.Aquila@gmail.com',md5('12345'),'Giovanni','Aquila',NULL,NULL,'Restaurateur','QLAGNN80P11G273B'),
-('Orazio.Gatti@gmail.com',md5('12345'),'Orazio','Gatti',NULL,NULL,'Restaurateur','GTTRZO75P08D612O'),
-('Luisa.Ferrara@gmail.com',md5('12345'),'Luisa','Ferrara',NULL,NULL,'Restaurateur','FRRLSU80M46G482J'),
-('Enzo.Tumicelli@gmail.com',md5('12345'),'Enzo','Tumicelli',NULL,NULL,'Restaurateur','TMCNZE80H12G478Y'),
-('Salvatore.Aloia@gmail.com',md5('12345'),'Salvatore','Aloia',NULL,NULL,'Regional Manager',NULL),
-('Ginevra.Barsotti@gmail.com',md5('12345'),'Ginevra','Barsotti',NULL,NULL,'Regional Manager',NULL),
-('Uberto.Innocenti@gmail.com',md5('12345'),'Uberto','Innocenti',NULL,NULL,'Regional Manager',NULL),
-('Ambrogio.Sparacello@gmail.com',md5('12345'),'Ambrogio','Sparacello',NULL,NULL,'Regional Manager',NULL),
-('Settimo.Albanesi@gmail.com',md5('12345'),'Settimo','Albanesi',TRUE,'Pro Loco Padova','Event Organizer',NULL),
-('Antonio.Como@gmail.com',md5('12345'),'Antonio','Como',TRUE,'Antichi Sapori','Event Organizer',NULL),
-('Michelina.Corti@gmail.com',md5('12345'),'Michelina','Corti',TRUE,'Chilometro zero','Event Organizer',NULL),
-('Fioralba.Murgia@gmail.com',md5('12345'),'Fioralba','Murgia',TRUE,'Coldiretti','Event Organizer',NULL),
-('Evelina.Piazza@gmail.com',md5('12345'),'Evelina','Piazza',NULL,NULL,'Customer',NULL),
-('Gianpaolo.Abano@gmail.com',md5('12345'),'Gianpaolo','Abano',NULL,NULL,'Customer',NULL),
-('Gualtiero.Aldebrandi@gmail.com',md5('12345'),'Gualtiero','Aldebrandi',NULL,NULL,'Customer',NULL),
-('Nicola.Abelli@gmail.com',md5('12345'),'Nicola','Abelli',NULL,NULL,'Customer',NULL),
-('Tatiana.Agnelli@gmail.com',md5('12345'),'Tatiana','Agnelli ',TRUE,NULL,'Producer','GNLTTN80D45D969Q'),
-('Angelo.Antonini@gmail.com',md5('12345'),'Angelo','Antonini',TRUE,NULL,'Producer','NTNNGL80H08L219J'),
-('Gualberto.Alescio@gmail.com',md5('12345'),'Gualberto','Alescio',TRUE,NULL,'Producer','LSCGBR80P11H501P'),
-('Beatrice.Altoviti@gmail.com',md5('12345'),'Beatrice','Altoviti ',TRUE,NULL,'Producer','LTVBRC80M48G224W');
+INSERT INTO End_User(email, password, first_name, last_name, validated, organization, role, tax_code) VALUES
+('Giovanni.Aquila@gmail.com', md5('12345'), 'Giovanni', 'Aquila', NULL, NULL, 'Restaurateur', 'QLAGNN80P11G273B'),
+('Orazio.Gatti@gmail.com', md5('12345'), 'Orazio', 'Gatti', NULL, NULL, 'Restaurateur', 'GTTRZO75P08D612O'),
+('Luisa.Ferrara@gmail.com', md5('12345'), 'Luisa', 'Ferrara', NULL, NULL, 'Restaurateur', 'FRRLSU80M46G482J'),
+('Enzo.Tumicelli@gmail.com', md5('12345'), 'Enzo', 'Tumicelli', NULL, NULL, 'Restaurateur', 'TMCNZE80H12G478Y'),
+('Salvatore.Aloia@gmail.com', md5('12345'), 'Salvatore', 'Aloia', NULL, NULL, 'Regional Manager', NULL),
+('Ginevra.Barsotti@gmail.com', md5('12345'), 'Ginevra', 'Barsotti', NULL, NULL, 'Regional Manager', NULL),
+('Uberto.Innocenti@gmail.com', md5('12345'), 'Uberto', 'Innocenti', NULL, NULL, 'Regional Manager', NULL),
+('Ambrogio.Sparacello@gmail.com', md5('12345'), 'Ambrogio', 'Sparacello', NULL, NULL, 'Regional Manager', NULL),
+('Settimo.Albanesi@gmail.com', md5('12345'), 'Settimo', 'Albanesi', TRUE, 'Pro Loco Padova', 'Event Organizer', NULL),
+('Antonio.Como@gmail.com', md5('12345'), 'Antonio', 'Como', TRUE, 'Antichi Sapori', 'Event Organizer', NULL),
+('Michelina.Corti@gmail.com', md5('12345'), 'Michelina', 'Corti', TRUE, 'Chilometro zero', 'Event Organizer', NULL),
+('Fioralba.Murgia@gmail.com', md5('12345'), 'Fioralba', 'Murgia', TRUE, 'Coldiretti', 'Event Organizer', NULL),
+('Evelina.Piazza@gmail.com', md5('12345'), 'Evelina', 'Piazza', NULL, NULL, 'Customer', NULL),
+('Gianpaolo.Abano@gmail.com', md5('12345'), 'Gianpaolo', 'Abano', NULL, NULL, 'Customer', NULL),
+('Gualtiero.Aldebrandi@gmail.com', md5('12345'), 'Gualtiero', 'Aldebrandi', NULL, NULL, 'Customer', NULL),
+('Nicola.Abelli@gmail.com', md5('12345'), 'Nicola', 'Abelli', NULL, NULL, 'Customer', NULL),
+('Tatiana.Agnelli@gmail.com', md5('12345'), 'Tatiana', 'Agnelli ', TRUE, NULL, 'Producer', 'GNLTTN80D45D969Q'),
+('Angelo.Antonini@gmail.com', md5('12345'), 'Angelo', 'Antonini', TRUE, NULL, 'Producer', 'NTNNGL80H08L219J'),
+('Gualberto.Alescio@gmail.com', md5('12345'), 'Gualberto', 'Alescio', TRUE, NULL, 'Producer', 'LSCGBR80P11H501P'),
+('Beatrice.Altoviti@gmail.com', md5('12345'), 'Beatrice', 'Altoviti', TRUE, NULL, 'Producer', 'LTVBRC80M48G224W');
 
-INSERT INTO Producer (email, pec, activity_description , location, telephone_number , business_name , vat_number text NOT NULL, region_name ) VALUES
-('Tatiana.Agnelli@gmail.com','Tatiana.Agnelli@legalmail.it','Allevamento di maiali e produzione propria di salumi','Conegliano','3923085842','Le carni di Tatiana','01906530983','Veneto'),
-('Angelo.Antonini@gmail.com','Angelo.Antonini@legalmail.it','Produzione di olio dei Colli Euganei','Cinto Euganeo','0429634030','Sapori dei Colli','01835500940','Veneto'),
-('Gualberto.Alescio@gmail.com','Gualberto.Alescio@legalmail.it','Piccolo allevamento di conigli','Padova','0496588741','Allevamento Alescio','02976538413','Veneto'),
-('Beatrice.Altoviti@gmail.com','Beatrice.Altoviti@legalmail.it','Produzione di confetture','Asiago','0424461475','Le confetture di Bea','01984568450','Veneto');
+INSERT INTO Producer(email, pec, activity_description , location, telephone_number , business_name , vat_number text NOT NULL, region_name ) VALUES
+('Tatiana.Agnelli@gmail.com', 'Tatiana.Agnelli@legalmail.it', 'Allevamento di maiali e produzione propria di salumi', 'Conegliano', '3923085842', 'Le carni di Tatiana', '01906530983', 'Veneto'),
+('Angelo.Antonini@gmail.com', 'Angelo.Antonini@legalmail.it', 'Produzione di olio dei Colli Euganei', 'Cinto Euganeo', '0429634030', 'Sapori dei Colli', '01835500940', 'Veneto'),
+('Gualberto.Alescio@gmail.com', 'Gualberto.Alescio@legalmail.it', 'Piccolo allevamento di conigli', 'Padova', '0496588741', 'Allevamento Alescio', '02976538413', 'Veneto'),
+('Beatrice.Altoviti@gmail.com', 'Beatrice.Altoviti@legalmail.it', 'Produzione di confetture', 'Asiago', '0424461475', 'Le confetture di Bea', '01984568450', 'Veneto');
 
-INSERT INTO Belong1 (email, category_id ) VALUES
+INSERT INTO Belong1(email, category_id ) VALUES
 ('Tatiana.Agnelli@gmail.com','A1')
 ('Angelo.Antonini@gmail.com','A6')
 ('Gualberto.Alescio@gmail.com','A2')
@@ -67,11 +67,20 @@ INSERT INTO Belong1 (email, category_id ) VALUES
 
 
 -- FARE GLI ORDINI PRIMA DEL 5 maggio
-INSERT INTO Orders (order_id, total_price, order_timestamp, order_status) VALUES
-    
-);
+INSERT INTO Orders(order_id, total_price, order_timestamp, order_status) VALUES
+('20.20', '2019-03-24 14:13:25+02', 'Canceled')
+('2.50', '2019-03-29 12:05:09+02', 'Canceled')
+('43.75', '2019-04-5 17:47:35+02', 'Completed')
+('3.60', '2019-04-7 14:13:25+02', 'Completed')
+('13.10', '2019-04-13 10:22:13+02', 'Completed')
+('12.00', '2019-04-19 18:44:30+02', 'Canceled')
+('8.05', '2019-04-22 12:15:00+02', 'Completed')
+('12.05', '2019-04-27 20:37:55+02', 'Completed')
+('12.35', '2019-05-01 19:18:57+02', 'Completed')
+('14.20', '2019-05-03 13:33:47+02', 'Reserved');
 
-INSERT INTO Contain (order_id, product_code, quantity, price) VALUES
+
+INSERT INTO Contain(order_id, product_code, quantity, price) VALUES
 (1, 1, 2, '12.05'),
 (1, 5, 1, '8.15'),
 (2, 7, 1, '2.50'),
@@ -87,7 +96,7 @@ INSERT INTO Contain (order_id, product_code, quantity, price) VALUES
 (9, 1, 2, '12.35'),
 (10, 10, 1, '14.20');
 
-INSERT INTO Product (name, general_description, category_id) VALUES
+INSERT INTO Product(name, general_description, category_id) VALUES
 ('Sopressa Vicentina D.O.P.', 'La Soppressa Vicentina è ottenuta dalla lavorazione di cosce, coppa, spalla, pancetta, grasso di gola e lombo di maiale.', 'A1'),
 ('Coppa di Testa di Este', 'La coppa di testa viene prodotta da tempo immemorabile dai contadini dell’estense, nel periodo invernale, immediatamente dopo la macellazione del maiale.', 'A1'),
 ('Gallina Padovana', 'Razza riconosciuta come "pura" da uno standard nazionale redatto dalla Federazione Italiana delle razze avicole.', 'A2'),
@@ -154,3 +163,29 @@ INSERT INTO Promote(email, product_code, event_id) VALUES
 ('Beatrice.Altoviti@gmail.com', 7, 1),
 ('Angelo.Antonini@gmail.com', 10, 2),
 ('Gualberto.Alescio@gmail.com', 4, 2);
+
+INSERT INTO Sale_Through(type, email) VALUES
+('Pay In store', 'Tatiana.Agnelli@gmail.com'),
+('Cash On delivery', 'Tatiana.Agnelli@gmail.com'),
+('Pay In store', 'Angelo.Antonini@gmail.com'),
+('Cash On delivery', 'Angelo.Antonini@gmail.com'),
+('Pay In store', 'Gualberto.Alescio@gmail.com'),
+('Pay In store', 'Beatrice.Altoviti@gmail.com');
+
+INSERT INTO Manage(email, region_name) VALUES
+('Salvatore.Aloia@gmail.com', 'Veneto')
+('Ginevra.Barsotti@gmail.com', 'Piemonte')
+('Uberto.Innocenti@gmail.com', 'Trentino-Alto Adige')
+('Ambrogio.Sparacello@gmail.com', 'Friuli-Venezia Giulia');
+
+INSERT INTO Make(order_id, type, customer_email, producer_email) VALUES
+(1, 'Cash On delivery', 'Evelina.Piazza@gmail.com', 'Angelo.Antonini@gmail.com'),
+(2, 'Pay In store', 'Gianpaolo.Abano@gmail.com', 'Tatiana.Agnelli@gmail.com'),
+(3, 'Cash On delivery', 'Evelina.Piazza@gmail.com', 'Angelo.Antonini@gmail.com'),
+(4, 'Pay In store', 'Gianpaolo.Abano@gmail.com', 'Gualberto.Alescio@gmail.com'),
+(5, 'Pay In store', 'Gualtiero.Aldebrandi@gmail.com', 'Angelo.Antonini@gmail.com'),
+(6, 'Pay In store', 'Gianpaolo.Abano@gmail.com', 'Beatrice.Altoviti@gmail.com'),
+(7, 'Pay In store', 'Nicola.Abelli@gmail.com', 'Gualberto.Alescio@gmail.com'),
+(8, 'Cash On delivery', 'Gualtiero.Aldebrandi@gmail.com', 'Tatiana.Agnelli@gmail.com'),
+(9, 'Pay In store', 'Evelina.Piazza@gmail.com', 'Tatiana.Agnelli@gmail.com'),
+(10, 'Cash On delivery', 'Gianpaolo.Abano@gmail.com', 'Angelo.Antonini@gmail.com');

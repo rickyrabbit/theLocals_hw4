@@ -116,13 +116,12 @@ INSERT INTO Sell(email , product_code , price, stock, image,  producer_descripti
 ('Beatrice.Altoviti@gmail.com', 6, '3.60', 40, NULL, 'Confettura di Mirtillo e Mela di coltivazioni secolari presenti nell'' Altopiano.600gr'),
 ('Beatrice.Altoviti@gmail.com', 7, '2.50', 38, NULL, 'Deliziosa confettura della rinomata Ciliegia di Marostica,famosa per il suo gusto caramelloso.550gr');
 
-
 INSERT INTO Review(email, product_code, score, content, review_timestamp) VALUES
-('Giovanni.Aquila@gmail.com', 1, 5, 'Sopressa di ottima fattura, con un buon rapporto qualità/prezzo.', '1558782126'),
-('Nicola.Abelli@gmail.com', 5, 4, 'Miele molto buono, forse un po'' troppo caro.', '1558782126'),
-('Uberto.Innocenti@gmail.com', 7, 3, 'Marmellata un po'' troppo dolce, accettabile per il prezzo.', '1558782126'),
-('Salvatore.Aloia@gmail.com', 3, 5, 'Ottima qualità di carne, riacquisterò sicuramente in futuro.', '1558782126'),
-('Settimo.Albanesi@gmail.com', 11, 5, 'Asiago perfetto.', '1558782126'),
+('Evelina.Piazza@gmail.com', 1, 5, 'Sopressa di ottima fattura, con un buon rapporto qualità/prezzo.', '1558782126'),
+('Gianpaolo.Abano@gmail.com', 5, 4, 'Miele molto buono, forse un po'' troppo caro.', '1558782126'),
+('Gianpaolo.Abano@gmail.com', 7, 3, 'Marmellata un po'' troppo dolce, accettabile per il prezzo.', '1558782126'),
+('Gualtiero.Aldebrandi@gmail.com', 3, 5, 'Ottima qualità di carne, riacquisterò sicuramente in futuro.', '1558782126'),
+('Nicola.Abelli@gmail.com', 11, 5, 'Asiago perfetto.', '1558782126'),
 ('Nicola.Abelli@gmail.com', 12, 1, 'Chiocciole arrivare troppo vecchie, le ho buttate.', '1558782126');
 
 INSERT INTO Restaurant(name, email, location, description, images, telephone_number, region_name) VALUES

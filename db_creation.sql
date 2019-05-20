@@ -182,8 +182,9 @@ CREATE TABLE Event(
     event_id SERIAL,
     name text NOT NULL,
     location text NOT NULL,
-    start_date date NOT NULL,
-    end_date date NOT NULL,
+    --start_date date NOT NULL,
+    --end_date date NOT NULL,
+    date_range daterange NOT NULL, -- da aggiungere alla variation la modifica
     description text,
     email emailD,
     region_name text NOT NULL,

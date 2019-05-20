@@ -88,8 +88,7 @@ INSERT INTO Contain (order_id, product_code, quantity, price) VALUES
 (7, 5, 1, '8.05'),
 (8, 12, 1, '12.05'),
 (9, 1, 2, '12.35'),
-(10, 10, 1, '14.20'),
-);
+(10, 10, 1, '14.20');
 
 INSERT INTO Product (name, general_description, category_id) VALUES
 ('Sopressa Vicentina D.O.P.', 'La Soppressa Vicentina è ottenuta dalla lavorazione di cosce, coppa, spalla, pancetta, grasso di gola e lombo di maiale.', 'A1'),
@@ -109,13 +108,13 @@ INSERT INTO Product (name, general_description, category_id) VALUES
 ('Birra di Rovigo D.O.P.', 'La birra artigianale è un prodotto non pastorizzato e non filtrato.', 'A11'),
 ('Aceto di Vino Euganeo', 'Aceto tipico dei Colli Euganei.', 'A12');
 
-INSERT INTO Sell(email , product_code , price, stock , image ,  producer_description ) VALUES
-('Tatiana.Agnelli@gmail.com',1,'12.05',7,NULL,'Soppressa Vicentina D.O.P di coppa e spalla aromatizata con rosmarino.800gr '),
-('Tatiana.Agnelli@gmail.com',2,'8.10',10,NULL,'Cappa di testa tradizionale estense aromatizzata al timo.900gr'),
-('Angelo.Antonini@gmail.com',10,'14.20',5,NULL,'Olio dei Colli Euganei spremuto a freddo,dal retrogusto piccante.1L'),
-('Gualberto.Alescio@gmail.com',4,'12.30',37,NULL,'Coniglio intero allevato all''aperto.1800gr'),
-('Beatrice.Altoviti@gmail.com',6,'3.60',40,NULL,'Confettura di Mirtillo e Mela di coltivazioni secolari presenti nell'' Altopiano.600gr'),
-('Beatrice.Altoviti@gmail.com',7,'2.50',38,NULL,'Deliziosa confettura della rinomata Ciliegia di Marostica,famosa per il suo gusto caramelloso.550gr');
+INSERT INTO Sell(email , product_code , price, stock, image,  producer_description) VALUES
+('Tatiana.Agnelli@gmail.com', 1, '12.05', 7, NULL, 'Soppressa Vicentina D.O.P di coppa e spalla aromatizata con rosmarino.800gr '),
+('Tatiana.Agnelli@gmail.com', 2, '8.10', 10, NULL, 'Cappa di testa tradizionale estense aromatizzata al timo.900gr'),
+('Angelo.Antonini@gmail.com', 10, '14.20', 5, NULL, 'Olio dei Colli Euganei spremuto a freddo,dal retrogusto piccante.1L'),
+('Gualberto.Alescio@gmail.com', 4, '12.30', 37, NULL, 'Coniglio intero allevato all''aperto.1800gr'),
+('Beatrice.Altoviti@gmail.com', 6, '3.60', 40, NULL, 'Confettura di Mirtillo e Mela di coltivazioni secolari presenti nell'' Altopiano.600gr'),
+('Beatrice.Altoviti@gmail.com', 7, '2.50', 38, NULL, 'Deliziosa confettura della rinomata Ciliegia di Marostica,famosa per il suo gusto caramelloso.550gr');
 
 
 INSERT INTO Review(email, product_code, score, content, review_timestamp) VALUES
@@ -134,21 +133,21 @@ INSERT INTO Restaurant(name, email, location, description, images, telephone_num
 
 INSERT INTO Own(restaurant_id, email) VALUES
 (1, 'Giovanni.Aquila@gmail.com'),
-(2,'Orazio.Gatti@gmail.com'),
-(3,'Luisa.Ferrara@gmail.com'),
+(2, 'Orazio.Gatti@gmail.com'),
+(3, 'Luisa.Ferrara@gmail.com'),
 (4, 'Enzo.Tumicelli@gmail.com');
 
 INSERT INTO Offer(restaurant_id, product_code) VALUES
 (1, 3),
-(1,4),
-(2,13),
-(2,15),
-(3,1),
-(4,10);
+(1, 4),
+(2, 13),
+(2, 15),
+(3, 1),
+(4, 10);
 
 INSERT INTO Event(name, location, date_range, description, email, region_name) VALUES
-('Festa di Primavera','Via Casoni, 31057 Casale sul Sile (TV)','[2019-03-20,2019-03-23]','Musica, vino e artigianato, tutti i giorni dalle 20 alle 23','Antonio.Como@gmail.com','Veneto'),
-('In Vino Veritas','Prato della Valle, 35123 Padova (PD)','[2019-09-15,2019-09-20]','Gustate i vini dei colli, tutti i giorni dalle 10 alle 23','Settimo.Albanesi@gmail.com','Veneto'),
-('Orto in Tavola','Piazza IV Novembre, 06100 Perugia (PG)','[2019-06-10,2019-06-20]','Le migliori produzioni locali in piazza, tutti i giorni dalle 10 alle 22','Fioralba.Murgia@gmail.com','Umbria'),
-('Festa della tagliata','Piazza della Biade, 36100 Vicenza (VI)','[2019-07-01,2019-07-05]','Carne di qualità tutte le sere dalle 19 alle 00','Antonio.Como@gmail.com','Veneto'),
-('Festa del Pane','Piazza del Duomo, 56126 Pisa (PI)','[2019-06-25,2019-06-30]','Cibo e musica tutte le sere dalle 19 alle 23','Michelina.Corti@gmail.com','Toscana');
+('Festa di Primavera', 'Via Casoni, 31057 Casale sul Sile (TV)', '[2019-03-20,2019-03-23]', 'Musica, vino e artigianato, tutti i giorni dalle 20 alle 23', 'Antonio.Como@gmail.com', 'Veneto'),
+('In Vino Veritas', 'Prato della Valle, 35123 Padova (PD)', '[2019-09-15,2019-09-20]', 'Gustate i vini dei colli, tutti i giorni dalle 10 alle 23', 'Settimo.Albanesi@gmail.com', 'Veneto'),
+('Orto in Tavola', 'Piazza IV Novembre, 06100 Perugia (PG)', '[2019-06-10,2019-06-20]', 'Le migliori produzioni locali in piazza, tutti i giorni dalle 10 alle 22', 'Fioralba.Murgia@gmail.com', 'Umbria'),
+('Festa della tagliata', 'Piazza della Biade, 36100 Vicenza (VI)', '[2019-07-01,2019-07-05]', 'Carne di qualità tutte le sere dalle 19 alle 00', 'Antonio.Como@gmail.com', 'Veneto'),
+('Festa del Pane', 'Piazza del Duomo, 56126 Pisa (PI)', '[2019-06-25,2019-06-30]', 'Cibo e musica tutte le sere dalle 19 alle 23', 'Michelina.Corti@gmail.com', 'Toscana');

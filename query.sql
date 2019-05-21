@@ -21,7 +21,7 @@
 -- Visualizzare storico ordini (ultimi 15) di un utente
 SELECT order_id, order_timestamp, total_price, type FROM Make AS m
 INNER JOIN Orders AS o ON m.order_id = o.order_id
-WHERE customer_email = "m8.avanzi@gmail.com" --TODO: Insert correct email
+WHERE customer_email = "Evelina.Piazza@gmail.com" --TODO: Insert correct email
 ORDER BY order_id DESC
 LIMIT 15;
 

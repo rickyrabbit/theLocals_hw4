@@ -4,16 +4,42 @@
 -- Insert operations
 
 INSERT INTO Region(name) VALUES 
-('Piemonte'), ('Valle d''Aosta'), ('Lombardia'), ('Trentino-Alto Adige'), ('Veneto'), ('Friuli-Venezia Giulia'), ('Liguria'), ('Emilia-Romagna'), ('Toscana'), ('Umbria'), ('Marche'), ('Lazio'), ('Abruzzo'), ('Molise'), ('Campania'), ('Puglia'), ('Basilicata'), ('Calabria'), ('Sicilia'), ('Sardegna');
+('Piemonte'), 
+('Valle d''Aosta'), 
+('Lombardia'), 
+('Trentino-Alto Adige'), 
+('Veneto'), 
+('Friuli-Venezia Giulia'), 
+('Liguria'), 
+('Emilia-Romagna'), 
+('Toscana'), 
+('Umbria'), 
+('Marche'), 
+('Lazio'), 
+('Abruzzo'), 
+('Molise'), 
+('Campania'), 
+('Puglia'), 
+('Basilicata'), 
+('Calabria'), 
+('Sicilia'), 
+('Sardegna');
 
 INSERT INTO Role(role) VALUES  -- mi restituiva ERRORE:  la colonna "role_type" della relazione "role" non esiste
-('Restaurateur'), ('Regional Manager'), ('Event Organizer'), ('Customer'), ('Producer');
+('Restaurateur'), 
+('Regional Manager'), 
+('Event Organizer'), 
+('Customer'), 
+('Producer');
 
 INSERT INTO Sales_Channel(type) VALUES
-('Pay In store'), ('Cash On delivery');
+('Pay In store'), 
+('Cash On delivery');
 
 INSERT INTO Status(status) VALUES
-('Reserved'), ('Completed'), ('Canceled');
+('Reserved'),
+('Completed'),
+('Canceled');
 
 INSERT INTO Category(category_id, name, description) VALUES
 ('A1', 'Carne Rossa', 'Lavorazione di carni di ungulati domestici o selvatici per produzione e vendita di prodotti a base di carne'),
@@ -125,9 +151,9 @@ INSERT INTO Event(name, location, date_range, description, email, region_name) V
 ('Festa del Pane', 'Piazza del Duomo, 56126 Pisa (PI)', '[2019-06-25,2019-06-30]', 'Cibo e musica tutte le sere dalle 19 alle 23', 'Michelina.Corti@gmail.com', 'Toscana');
 
 INSERT INTO Manage(email, region_name) VALUES
-('Salvatore.Aloia@gmail.com', 'Veneto')
-('Ginevra.Barsotti@gmail.com', 'Piemonte')
-('Uberto.Innocenti@gmail.com', 'Trentino-Alto Adige')
+('Salvatore.Aloia@gmail.com', 'Veneto'),
+('Ginevra.Barsotti@gmail.com', 'Piemonte'),
+('Uberto.Innocenti@gmail.com', 'Trentino-Alto Adige'),
 ('Ambrogio.Sparacello@gmail.com', 'Friuli-Venezia Giulia');
 
 INSERT INTO Offer(restaurant_id, product_code) VALUES

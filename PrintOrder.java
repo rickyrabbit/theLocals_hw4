@@ -27,7 +27,7 @@ public class PrintOrder {
 	/**
 	 * The URL of the database to be accessed
 	 */
-	private static final String DATABASE = "jdbc:postgresql://localhost/localproductions";
+	private static final String DATABASE = "jdbc:postgresql://127.0.0.1/localproductions";
 
 	/**
 	 * The username for accessing the database
@@ -79,7 +79,7 @@ public class PrintOrder {
 
 	private static final String EMAIL_CHECK = "SELECT * FROM End_User WHERE email = ?;";
 
-	private static final String SELECT_PSW = "SELECT password FROM End_user WHERE email = ?;";
+	private static final String SELECT_PSW = "SELECT password FROM End_User WHERE email = ?;";
 	
 	private static final String ROLE = "SELECT role FROM End_User WHERE email = ?;";
  	
@@ -221,7 +221,7 @@ public class PrintOrder {
 		
 		try {
 			pstmt = con.prepareStatement(SELECT_PSW);
-			pstmt.setString(1, user_psw);
+			pstmt.setString(1, email);
 			rs = pstmt.executeQuery();
 			if(rs.next()){
 				real_psw = rs.getString("password");
@@ -376,21 +376,22 @@ public class PrintOrder {
 			//Login
 
 			System.out.printf("Welcome!");
-			System.out.printf("Please insert your email to login.");
+			System.out.printf("Please insert your email to login.\n");
 			email = scan.nextLine();
 			while(!checkIfUserExists(email)) {
-				System.out.printf("Please insert a registered email.");
+				System.out.printf("Please insert a registered email.\n");
 				email = scan.nextLine();
 			}
 		
-			System.out.printf("Please insert your password.");
+			System.out.printf("Please insert your password.\n");
 			String user_password = scan.nextLine();
 
-			while(checkPassword(user_password)) {
-				System.out.printf("Please insert the correct password.");
+			while(!checkPassword(user_password)) {
+				System.out.printf("Please insert the correct password.\n");
 				user_password = scan.nextLine();
 			}
 
+			System.out.println(user_password);
 			//User logged in
 			
 

@@ -232,13 +232,21 @@ public class PrintOrder {
 			if(user_psw == null || !(user_psw instanceof String) || user_psw.length() == 0){
 				throw new IllegalArgumentException("Incorrect argument passed to the function");
 			}
-			
+			/*
 			byte[] psw_bytes = user_psw.getBytes(StandardCharsets.UTF_8);
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			byte[] psw_digested = md.digest(psw_bytes);
 			String psw_dig = new String(psw_digested);
-			
-			if(psw_dig == real_psw ){
+			*/
+
+			MessageDigest md = MessageDigest.getInstance("MD5");
+		    md.update(user_psw.getBytes());
+		    byte[] digest = md.digest();
+		    String myHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+		         
+		   //assertThat(psw_dig.equals(real_psw)).isTrue();
+
+			if(myHash.equals(real_psw) ){
 				return true;
 			}else{
 				return false;

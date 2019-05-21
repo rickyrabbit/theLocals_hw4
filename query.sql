@@ -38,10 +38,10 @@ ORDER BY name ASC;
 
 -- Visualizzare eventi presenti e futuri in una regione (Quando si tengono, descrizione e i prodotti che contengono)
 
-SELECT e.event_id, e.name, description, date_range, location, region_name, p.product_code, p.name FROM Event AS e
+SELECT e.event_id, e.name, description, start_date, end_date, location, region_name, p.product_code, p.name FROM Event AS e
 INNER JOIN Promote as prm ON e.event_id = prm.event_id
 INNER JOIN Product as p ON prm.product_code = p.product_code
-WHERE CURRENT_DATE <@ date_range OR '[2019-01-01,2019-03-01)'::tsrange << date_range; --TODO: check date
+WHERE end_date >= CURRENT_DATE; --TODO: check date
 
 
 --STATISTICHE

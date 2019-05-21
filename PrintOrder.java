@@ -55,7 +55,7 @@ public class PrintOrder {
 			+ "INNER JOIN Make AS m On c.order_id = m.order_id "
 			+ "INNER JOIN Product AS p ON c.product_code = p.product_code "
 			+ "INNER JOIN Producer AS prdcr ON m.producer_email = prdcr.email "
-			+ "WHERE c.order_id = ? "
+			+ "WHERE c.order_id::varchar = ? "
 			+ "ORDER BY name ASC; ";
 
 	/**
@@ -402,11 +402,11 @@ public class PrintOrder {
 					if(choice.equals("1")) {
 						printOrders(email);
 					} else if (choice.equals("2")) {
-						System.out.printf("Insert your order ID");
+						System.out.printf("Insert your order ID\n");
 						String order_id = scan.nextLine();
 						printOrderDetail(order_id);
 					} else if (choice.equals("3")) {
-						System.out.printf("Insert the Region");
+						System.out.printf("Insert the Region\n");
 						String region = scan.nextLine();
 						printEvents(region);
 					} else if (choice.equals("q")) {

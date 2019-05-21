@@ -6,14 +6,10 @@
 - Visualizzare storico ordini di un utente DONE
 - Visualizzare un dettaglio ordine (Prodotti, prezzo singolo, prezzo totale ordini, produttore, data) DONE
 - Visualizzare eventi presenti e futuri in una regione (Quando si tengono, descrizione e i prodotti che contengono)
-- 
-
 
 - STATISTICHE
-	-- visualizzare statistiche di vendita per un produttore (per ogni prodotto le unita' gia' vendute)
-    -- prodotti piu' venduti per regione
-     
-
+-- visualizzare statistiche di vendita per un produttore (per ogni prodotto le unita' gia' vendute)
+-- prodotti piu' venduti per regione (Deprecated)
 
 */
 
@@ -45,31 +41,7 @@ WHERE end_date >= CURRENT_DATE; --TODO: check date
 
 
 --STATISTICHE
-	-- visualizzare statistiche di vendita per un produttore (per ogni prodotto le unita' gia' vendute)
-/*
-WITH producer_products AS (
-    SELECT email,product_code FROM Producer AS prdcr
-    INNER JOIN Sell AS s ON prdcr.email = s.email
-    INNER JOIN Product AS p ON s.product_code = p.product_code
-    WHERE email = 'm8.avanzi@gmail.com'
-)
-
-WITH producer_orders AS (
-    SELECT order_id FROM Make AS mk
-    WHERE mk.producer_email = 'Angelo.Antonini@gmail.com' --TODO: inserire email produttore
-), completed_orders AS (
-    SELECT order_id FROM Orders 
-    WHERE Orders.order_status = 'Completed'
-), producer_completed_orders AS (
-    SELECT order_id FROM completed_orders AS co
-    WHERE co.order_id = producer_orders.order_id
-)
-SELECT  product_code,
-        SUM(quantity) AS product_quantity_sold
-FROM producer_completed_orders AS pco
-WHERE pco.order_id = Contain.order_id
-GROUP BY product_code;
-*/
+-- visualizzare statistiche di vendita per un produttore (per ogni prodotto le unita' gia' vendute)
 
 SELECT c.product_code, SUM(c.quantity) AS "Total Sell" FROM Make AS m
 INNER JOIN Orders AS o ON m.order_id = o.order_id

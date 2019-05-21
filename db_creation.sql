@@ -97,7 +97,7 @@ CREATE TABLE Restaurant(
     email emailD,
     location text NOT NULL,
     description text,
-    images bytea, -- TODO: Check if correct
+    images text, -- TODO: Check if correct DONE
     telephone_number text NOT NULL,
     region_name text NOT NULL,
     PRIMARY KEY (restaurant_id),

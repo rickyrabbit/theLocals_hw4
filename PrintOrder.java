@@ -61,6 +61,7 @@ public class PrintOrder {
 	/**
 	 * The query to list the future events that will take place in a region
 	 */
+	//TODO: Sistemare query
 	private static final String LIST_EVENTS = "SELECT e.event_id, e.name, description, start_date, end_date, location, region_name FROM Event AS e "
 			+ "INNER JOIN Promote AS prm ON prm.event_id = e.event_id "
 			+ "WHERE end_date >= CURRENT_DATE AND region_name = ?; ";
@@ -176,8 +177,8 @@ public class PrintOrder {
 
 			System.out.println("Event Name\tDescription\tStart Date\tEnd Date\tLocation\tRegion");
 			while (rs.next()) {
-				System.out.printf("%s\t%s\t%t\t%t\t%s\t%s\t%s\n", rs.getString("name"),
-						rs.getString("description"), rs.getString("start_date"), rs.getString("end_date"), rs.getString("location"), rs.getString("region"));
+				System.out.printf("%s\t%s\t%s\t%s\t%s\t%s\n", rs.getString("name"),
+						rs.getString("description"), rs.getString("start_date"), rs.getString("end_date"), rs.getString("location"), rs.getString("region_name"));
 			}
 		} finally{
 			if (rs != null) {

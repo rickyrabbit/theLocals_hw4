@@ -23,11 +23,12 @@ COMMENT ON DOMAIN emailD IS 'alphanumeric emailD domain';
 -- CREATE DOMAIN name_type AS VARCHAR()
 
 CREATE DOMAIN passwordD AS character varying(254)
-	CONSTRAINT INT properpassword CHECK (((VALUE)::text ~* '[A-Za-z0-9._%-]{5,}'::text));
+	CONSTRAINT properpassword CHECK (((VALUE)::text ~* '[A-Za-z0-9._%-]{5,}'::text));
 COMMENT ON DOMAIN passwordD IS 'alphanumeric passwordD domain, max 254 characters';
 
-CREATE DOMAIN reviewScoreD AS SMALLINT NOT NULL
-    CONSTRAINT CHECK (VALUE >= 1 AND VALUE <= 5);
+CREATE DOMAIN reviewScoreD AS SMALLINT
+    NOT NULL
+    CONSTRAINT review_interval CHECK (VALUE >= 1 AND VALUE <= 5);
 COMMENT ON DOMAIN reviewScoreD IS 'A review score can be an int between 1 and 5';
 
 
@@ -89,7 +90,6 @@ CREATE TABLE Product(
     FOREIGN KEY (category_id) REFERENCES Category(category_id)
 );
 COMMENT ON TABLE Product IS 'Good sold by the producer within the catalogue';
-
 
 CREATE TABLE Restaurant(
     restaurant_id SERIAL,

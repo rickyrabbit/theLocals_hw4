@@ -74,10 +74,10 @@ INSERT INTO Product(name, general_description, category_id) VALUES
 ('Aceto di Vino Euganeo', 'Aceto tipico dei Colli Euganei.', 'A12');
 
 INSERT INTO Restaurant(name, email, location, description, images, telephone_number, region_name) VALUES
-('Le calandre', 'lecalandre@gmail.com', 'Padova', 'Traditional Italian restaurant', NULL, '0490000', 'Veneto'),
-('Da Orazio', 'daorazio@gmail.com', 'Treviso', 'Seafood restaurant', NULL, '04221000', 'Veneto'),
-('Da Luisa', 'daluisa@gmail.com', 'Venezia', 'Trattoria', NULL, '346013406', 'Veneto'),
-('Da Pino', 'dapino@gmail.com', 'Verona', 'Pizzeria', NULL, '346713406', 'Veneto');
+('Le calandre', 'lecalandre@gmail.com', 'Padova', 'Traditional Italian restaurant', 'https://bit.ly/2LW54GS', '0490000', 'Veneto'),
+('Da Orazio', 'daorazio@gmail.com', 'Treviso', 'Seafood restaurant', 'https://bit.ly/2QexFpo', '04221000', 'Veneto'),
+('Da Luisa', 'daluisa@gmail.com', 'Venezia', 'Trattoria', 'https://bit.ly/2Eojo4P', '346013406', 'Veneto'),
+('Da Pino', 'dapino@gmail.com', 'Verona', 'Pizzeria', 'https://bit.ly/2YE0sGX', '346713406', 'Veneto');
 
 INSERT INTO End_User(email, password, first_name, last_name, validated, organization, role, tax_code) VALUES
 ('Giovanni.Aquila@gmail.com', md5('12345'), 'Giovanni', 'Aquila', NULL, NULL, 'Restaurateur', 'QLAGNN80P11G273B'),

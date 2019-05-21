@@ -46,16 +46,31 @@ WHERE CURRENT_DATE <@ date_range OR '[2019-01-01,2019-03-01)'::tsrange << date_r
 
 --STATISTICHE
 	-- visualizzare statistiche di vendita per un produttore (per ogni prodotto le unita' gia' vendute)
+/*
 WITH producer_products AS (
     SELECT email,product_code FROM Producer AS prdcr
     INNER JOIN Sell AS s ON prdcr.email = s.email
     INNER JOIN Product AS p ON s.product_code = p.product_code
     WHERE email = 'm8.avanzi@gmail.com'
 )
-WITH sold_product_quantities AS (
-    SELECT 
+*/
+WITH producer_orders AS (
+    SELECT order_id FROM Make AS mk
+    WHERE mk.producer_email = "input@gmail.com"; --TODO: inserire email produttore
+), completed_orders AS (
+    SELECT order_id FROM Orders 
+    WHERE Orders.order_status = 'Completed';
+), producer_completed_orders AS (
+    SELECT order_id FROM completed_orders AS co
+    WHERE co.order_id = producer_orders.order_id;
 )
-    
+SELECT  product_code,
+        SUM(quantity) AS product_quantity_sold
+FROM producer_completed_orders AS pco
+WHERE pco.order_id = Contain.order_id
+GROUP BY product_code;
+
+
     
     
     -- 3 prodotti piu' venduti per regione

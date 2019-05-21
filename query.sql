@@ -33,11 +33,11 @@ ORDER BY name ASC;
 
 
 -- Visualizzare eventi presenti e futuri in una regione (Quando si tengono, descrizione e i prodotti che contengono)
-
-SELECT e.event_id, e.name, description, start_date, end_date, location, region_name, p.product_code, p.name FROM Event AS e
-INNER JOIN Promote as prm ON e.event_id = prm.event_id
-INNER JOIN Product as p ON prm.product_code = p.product_code
-WHERE end_date >= CURRENT_DATE; --TODO: check date
+-- description
+SELECT e.event_id, e.name, start_date, end_date, location, region_name, p.product_code, p.name FROM Event AS e
+INNER JOIN Promote AS prm ON prm.event_id = e.event_id
+INNER JOIN Product AS p ON p.product_code = prm.product_code
+WHERE end_date >= CURRENT_DATE AND region_name = 'Veneto'; --TODO: check date
 
 
 --STATISTICHE

@@ -144,11 +144,11 @@ INSERT INTO Review(email, product_code, score, content, review_timestamp) VALUES
 ('Gualtiero.Aldebrandi@gmail.com', 12, 1, 'Chiocciole arrivare troppo vecchie, le ho buttate.', '2019-05-19 09:29:54+02');
 
 INSERT INTO Event(name, location, start_date, end_date, description, email, region_name) VALUES
-('Festa di Primavera', 'Via Casoni, 31057 Casale sul Sile (TV)', '2019-03-20', '2019-03-23', 'Musica, vino e artigianato, tutti i giorni dalle 20 alle 23', 'Antonio.Como@gmail.com', 'Veneto'),
+('Festa di Primavera', 'Via Casoni, 31057 Casale sul Sile (TV)', '2019-07-20', '2019-07-23', 'Musica, vino e artigianato, tutti i giorni dalle 20 alle 23', 'Antonio.Como@gmail.com', 'Veneto'),
 ('In Vino Veritas', 'Prato della Valle, 35123 Padova (PD)', '2019-09-15', '2019-09-20', 'Gustate i vini dei colli, tutti i giorni dalle 10 alle 23', 'Settimo.Albanesi@gmail.com', 'Veneto'),
 ('Orto in Tavola', 'Piazza IV Novembre, 06100 Perugia (PG)', '2019-06-10', '2019-06-20', 'Le migliori produzioni locali in piazza, tutti i giorni dalle 10 alle 22', 'Fioralba.Murgia@gmail.com', 'Umbria'),
 ('Festa della tagliata', 'Piazza della Biade, 36100 Vicenza (VI)', '2019-07-01', '2019-07-05', 'Carne di qualità tutte le sere dalle 19 alle 00', 'Antonio.Como@gmail.com', 'Veneto'),
-('Festa del Pane', 'Piazza del Duomo, 56126 Pisa (PI)', '2019-06-25', '2019-06-30', 'Cibo e musica tutte le sere dalle 19 alle 23', 'Michelina.Corti@gmail.com', 'Toscana');
+('Festa del Pane', 'Piazza del Duomo, 56126 Pisa (PI)', '2019-10-25', '2019-10-30', 'Cibo e musica tutte le sere dalle 19 alle 23', 'Michelina.Corti@gmail.com', 'Toscana');
 
 INSERT INTO Manage(email, region_name) VALUES
 ('Salvatore.Aloia@gmail.com', 'Veneto'),
@@ -191,11 +191,13 @@ INSERT INTO Sell(email , product_code , price, stock, image,  producer_descripti
 ('Beatrice.Altoviti@gmail.com', 7, '2.50', 38, NULL, 'Deliziosa confettura della rinomata Ciliegia di Marostica,famosa per il suo gusto caramelloso. Prezzo indicato per 450g di prodotto.');
 
 INSERT INTO Promote(email, product_code, event_id) VALUES
-('Beatrice.Altoviti@gmail.com', 6, 2),
 ('Beatrice.Altoviti@gmail.com', 6, 1),
 ('Beatrice.Altoviti@gmail.com', 7, 1),
+('Beatrice.Altoviti@gmail.com', 6, 2),
+('Gualberto.Alescio@gmail.com', 4, 2),
 ('Angelo.Antonini@gmail.com', 10, 2),
-('Gualberto.Alescio@gmail.com', 4, 2);
+('Tatiana.Agnelli@gmail.com', 2, 4),
+('Gualberto.Alescio@gmail.com', 4, 4);
 
 INSERT INTO Belong1(email, category_id ) VALUES
 ('Tatiana.Agnelli@gmail.com','A1'),

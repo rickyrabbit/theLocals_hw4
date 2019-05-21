@@ -76,16 +76,16 @@ INSERT INTO End_User(email, password, first_name, last_name, validated, organiza
 ('Beatrice.Altoviti@gmail.com', md5('12345'), 'Beatrice', 'Altoviti', TRUE, NULL, 'Producer', 'LTVBRC80M48G224W');
 
 INSERT INTO Orders(order_id, total_price, order_timestamp, order_status) VALUES
-('20.20', '2019-03-24 14:13:25+02', 'Canceled')
-('2.50', '2019-03-29 12:05:09+02', 'Canceled')
-('43.75', '2019-04-5 17:47:35+02', 'Completed')
-('3.60', '2019-04-7 14:13:25+02', 'Completed')
-('13.10', '2019-04-13 10:22:13+02', 'Completed')
-('12.00', '2019-04-19 18:44:30+02', 'Canceled')
-('8.05', '2019-04-22 12:15:00+02', 'Completed')
-('12.05', '2019-04-27 20:37:55+02', 'Completed')
-('12.35', '2019-05-01 19:18:57+02', 'Completed')
-('14.20', '2019-05-03 13:33:47+02', 'Completed');
+('20.20', '2019-03-24 14:13:25+02', 'Completed'),
+('2.50', '2019-03-29 12:05:09+02', 'Completed'),
+('43.75', '2019-04-5 17:47:35+02', 'Completed'),
+('3.60', '2019-04-7 14:13:25+02', 'Canceled'),
+('13.10', '2019-04-13 10:22:13+02', 'Completed'),
+('12.00', '2019-04-19 18:44:30+02', 'Canceled'),
+('8.05', '2019-04-22 12:15:00+02', 'Completed'),
+('12.05', '2019-04-27 20:37:55+02', 'Completed'),
+('12.35', '2019-05-01 19:18:57+02', 'Completed'),
+('14.20', '2019-05-03 13:33:47+02', 'Canceled');
 
 INSERT INTO Contain(order_id, product_code, quantity, price) VALUES
 (1, 1, 2, '12.05'),
@@ -111,11 +111,11 @@ INSERT INTO Producer(email, pec, activity_description , location, telephone_numb
 
 INSERT INTO Review(email, product_code, score, content, review_timestamp) VALUES
 ('Evelina.Piazza@gmail.com', 1, 5, 'Sopressa di ottima fattura, con un buon rapporto qualità/prezzo.', '2019-05-10 11:23:54+02'),
-('Gianpaolo.Abano@gmail.com', 5, 4, 'Miele molto buono, forse un po'' troppo caro.', '2019-05-13 10:23:54+02'),
+('Nicola.Abelli@gmail.com', 5, 4, 'Miele molto buono, forse un po'' troppo caro.', '2019-05-13 10:23:54+02'),
 ('Gianpaolo.Abano@gmail.com', 7, 3, 'Marmellata un po'' troppo dolce, accettabile per il prezzo.', '2019-05-15 12:23:54+02'),
-('Gualtiero.Aldebrandi@gmail.com', 3, 5, 'Ottima qualità di carne, riacquisterò sicuramente in futuro.', '2019-05-16 10:43:54+02'),
-('Nicola.Abelli@gmail.com', 11, 5, 'Asiago perfetto.', '2019-05-18 10:23:54+02'),
-('Nicola.Abelli@gmail.com', 12, 1, 'Chiocciole arrivare troppo vecchie, le ho buttate.', '2019-05-19 09:29:54+02');
+('Evelina.Piazza@gmail.com', 3, 5, 'Ottima qualità di carne, riacquisterò sicuramente in futuro.', '2019-05-16 10:43:54+02'),
+('Evelina.Piazza@gmail.com', 11, 5, 'Asiago perfetto.', '2019-05-18 10:23:54+02'),
+('Gualtiero.Aldebrandi@gmail.com', 12, 1, 'Chiocciole arrivare troppo vecchie, le ho buttate.', '2019-05-19 09:29:54+02');
 
 INSERT INTO Event(name, location, date_range, description, email, region_name) VALUES
 ('Festa di Primavera', 'Via Casoni, 31057 Casale sul Sile (TV)', '[2019-03-20,2019-03-23]', 'Musica, vino e artigianato, tutti i giorni dalle 20 alle 23', 'Antonio.Como@gmail.com', 'Veneto'),
@@ -157,12 +157,12 @@ INSERT INTO Make(order_id, type, customer_email, producer_email) VALUES
 (10, 'Cash On delivery', 'Gianpaolo.Abano@gmail.com', 'Angelo.Antonini@gmail.com');
 
 INSERT INTO Sell(email , product_code , price, stock, image,  producer_description) VALUES
-('Tatiana.Agnelli@gmail.com', 1, '12.05', 7, NULL, 'Soppressa Vicentina D.O.P di coppa e spalla aromatizata con rosmarino.800gr '),
-('Tatiana.Agnelli@gmail.com', 2, '8.10', 10, NULL, 'Cappa di testa tradizionale estense aromatizzata al timo.900gr'),
-('Angelo.Antonini@gmail.com', 10, '14.20', 5, NULL, 'Olio dei Colli Euganei spremuto a freddo,dal retrogusto piccante.1L'),
-('Gualberto.Alescio@gmail.com', 4, '12.30', 37, NULL, 'Coniglio intero allevato all''aperto.1800gr'),
-('Beatrice.Altoviti@gmail.com', 6, '3.60', 40, NULL, 'Confettura di Mirtillo e Mela di coltivazioni secolari presenti nell'' Altopiano.600gr'),
-('Beatrice.Altoviti@gmail.com', 7, '2.50', 38, NULL, 'Deliziosa confettura della rinomata Ciliegia di Marostica,famosa per il suo gusto caramelloso.550gr');
+('Tatiana.Agnelli@gmail.com', 1, '12.05', 7, NULL, 'Soppressa Vicentina D.O.P di coppa e spalla aromatizata con rosmarino. Prezzo indicato per 800g di prodotto.'),
+('Tatiana.Agnelli@gmail.com', 2, '8.10', 10, NULL, 'Cappa di testa tradizionale estense aromatizzata al timo. Prezzo indicato per 900g di prodotto.'),
+('Angelo.Antonini@gmail.com', 10, '14.20', 5, NULL, 'Olio dei Colli Euganei spremuto a freddo,dal retrogusto piccante. Prezzo indicato per 1L di prodotto.'),
+('Gualberto.Alescio@gmail.com', 4, '12.30', 37, NULL, 'Coniglio intero allevato all''aperto. Prezzo indicato per 1800g di prodotto.'),
+('Beatrice.Altoviti@gmail.com', 6, '3.60', 40, NULL, 'Confettura di Mirtillo e Mela di coltivazioni secolari presenti nell'' Altopiano. Prezzo indicato per 600g di prodotto.'),
+('Beatrice.Altoviti@gmail.com', 7, '2.50', 38, NULL, 'Deliziosa confettura della rinomata Ciliegia di Marostica,famosa per il suo gusto caramelloso. Prezzo indicato per 450g di prodotto.');
 
 INSERT INTO Promote(email, product_code, event_id) VALUES
 ('Beatrice.Altoviti@gmail.com', 6, 1),

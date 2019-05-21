@@ -24,43 +24,56 @@ public class PrintOrder {
 	/**
 	 * The URL of the database to be accessed
 	 */
-	private static final String DATABASE = "jdbc:postgresql://dbstud/dbms1718?currentSchema=pasta";
+	private static final String DATABASE = "jdbc:postgresql://localhost/localproductions";
 
 	/**
 	 * The username for accessing the database
 	 */
-	private static final String USER = "webdb";
+	private static final String USER = "jarvis";
 
 	/**
 	 * The password for accessing the database
 	 */
-	private static final String PASSWORD = "webdb";
+	private static final String PASSWORD = "";
 
 	/**
-	 * The statement to read the menus
+	 * The statement to list the last 15 orders done by a customer
 	 */
-	private static final String LIST_MENUS = "SELECT id, name, description "
-			+ "FROM menu WHERE enabled is TRUE";
+	private static final String LIST_ORDERS = "SELECT o.order_id, o.order_timestamp, o.total_price, m.type FROM Make AS m "
+			+ "SELECT o.order_id, o.order_timestamp, o.total_price, m.type FROM Make AS m "
+			+ "INNER JOIN Orders AS o ON m.order_id = o.order_id " 
+			+ "WHERE customer_email = ? " 
+			+ "ORDER BY order_id DESC " 
+			+ "LIMIT 15; "; 
 
 	/**
-	 * The statement to print the dishes of a menu
+	 * The statement to list the details of an order
 	 */
-	private static final String LIST_DISHES = "SELECT id, name, description, "
-			+ "price::money::numeric::float8 "
-			+ "FROM dish INNER JOIN belong1 ON id = dish_id WHERE menu_id = ?";
+	private static final String LIST_ORDER_DETAIL = "SELECT c.order_id, p.product_code, name, quantity, price AS \"Unit Price\", business_name FROM Contain as c "
+			+ "INNER JOIN Make AS m On c.order_id = m.order_id "
+			+ "INNER JOIN Product AS p ON c.product_code = p.product_code "
+			+ "INNER JOIN Producer AS prdcr ON m.producer_email = prdcr.email "
+			+ "WHERE c.order_id = ? "
+			+ "ORDER BY name ASC; ";
 
 	/**
-	 * The query to place the order
+	 * The query to list the future events that will take place in a region
 	 */
-	private static final String PLACE_ORDER = "INSERT INTO Purchase "
-			+ "(id, display_name, takeout, internet, n_clients, total, created_by) "
-			+ "VALUES (?, ?, FALSE, FALSE, ?, ?, 'thomas')";
+	private static final String LIST_EVENTS = "SELECT e.event_id, e.name, description, start_date, end_date, location, region_name, p.product_code, p.name FROM Event AS e "
+			+ "INNER JOIN Promote AS prm ON prm.event_id = e.event_id "
+			+ "INNER JOIN Product AS p ON p.product_code = prm.product_code "
+			+ "WHERE end_date >= CURRENT_DATE AND region_name = ?; ";
 
 	/**
-	 * The query to add dishes to the order
+	 * The query to list the 3 most sold product by a producer
 	 */
-	private static final String DISH_ORDER = "INSERT INTO Contain "
-			+ "(order_id, dish_id, quantity, applied_price) VALUES (?, ?, ?, ?)";
+	private static final String LIST_PRODUCER_STATS = "SELECT c.product_code, SUM(c.quantity) AS \"Total Sell\" FROM Make AS m "
+			+ "INNER JOIN Orders AS o ON m.order_id = o.order_id "
+			+ "INNER JOIN Contain AS c ON m.order_id = c.order_id "
+			+ "WHERE m.producer_email = ? AND o.order_status = 'Completed' "
+			+ "GROUP BY c.product_code "
+			+ "ORDER BY \"Total Sell\" DESC "
+			+ "LIMIT 3; ";
 
 	/**
 	 * The connection to the database

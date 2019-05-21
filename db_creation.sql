@@ -23,7 +23,7 @@ COMMENT ON DOMAIN emailD IS 'alphanumeric emailD domain';
 -- CREATE DOMAIN name_type AS VARCHAR()
 
 CREATE DOMAIN passwordD AS character varying(254)
-	CONSTRAINT INT properpassword CHECK (((VALUE)::text ~* '[A-Za-z0-9._%-]{5,}'::text));
+	CONSTRAINT properpassword CHECK (((VALUE)::text ~* '[A-Za-z0-9._%-]{5,}'::text));
 COMMENT ON DOMAIN passwordD IS 'alphanumeric passwordD domain, max 254 characters';
 
 CREATE DOMAIN reviewScoreD AS SMALLINT NOT NULL

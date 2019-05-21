@@ -53,25 +53,28 @@ WITH producer_products AS (
     INNER JOIN Product AS p ON s.product_code = p.product_code
     WHERE email = 'm8.avanzi@gmail.com'
 )
-*/
+
 WITH producer_orders AS (
     SELECT order_id FROM Make AS mk
-    WHERE mk.producer_email = "input@gmail.com"; --TODO: inserire email produttore
+    WHERE mk.producer_email = 'Angelo.Antonini@gmail.com' --TODO: inserire email produttore
 ), completed_orders AS (
     SELECT order_id FROM Orders 
-    WHERE Orders.order_status = 'Completed';
+    WHERE Orders.order_status = 'Completed'
 ), producer_completed_orders AS (
     SELECT order_id FROM completed_orders AS co
-    WHERE co.order_id = producer_orders.order_id;
+    WHERE co.order_id = producer_orders.order_id
 )
 SELECT  product_code,
         SUM(quantity) AS product_quantity_sold
 FROM producer_completed_orders AS pco
 WHERE pco.order_id = Contain.order_id
 GROUP BY product_code;
+*/
 
-
-    
-    
-    -- 3 prodotti piu' venduti per regione
-SELECT product_code, name, quantity
+SELECT c.product_code, SUM(c.quantity) AS "Total Sell" FROM Make AS m
+INNER JOIN Orders AS o ON m.order_id = o.order_id
+INNER JOIN Contain AS c ON m.order_id = c.order_id
+WHERE m.producer_email = 'Angelo.Antonini@gmail.com' AND o.order_status = 'Completed'
+GROUP BY c.product_code
+ORDER BY "Total Sell" DESC
+LIMIT 3;

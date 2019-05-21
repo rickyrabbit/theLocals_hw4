@@ -3,13 +3,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.math.BigDecimal;
-
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import java.security.*; // library used to compute md5
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Simulate an order, through a textual interface
@@ -59,9 +62,8 @@ public class PrintOrder {
 	/**
 	 * The query to list the future events that will take place in a region
 	 */
-	private static final String LIST_EVENTS = "SELECT e.event_id, e.name, description, start_date, end_date, location, region_name, p.product_code, p.name FROM Event AS e "
+	private static final String LIST_EVENTS = "SELECT e.event_id, e.name, description, start_date, end_date, location, region_name FROM Event AS e "
 			+ "INNER JOIN Promote AS prm ON prm.event_id = e.event_id "
-			+ "INNER JOIN Product AS p ON p.product_code = prm.product_code "
 			+ "WHERE end_date >= CURRENT_DATE AND region_name = ?; ";
 
 	/**
@@ -75,6 +77,12 @@ public class PrintOrder {
 			+ "ORDER BY \"Total Sell\" DESC "
 			+ "LIMIT 3; ";
 
+	private static final String EMAIL_CHECK = "SELECT * FROM End_User WHERE email = ?;";
+
+	private static final String SELECT_PSW = "SELECT password FROM End_user WHERE email = ?;";
+	
+	private static final String ROLE = "SELECT role FROM End_User WHERE email = ?;";
+ 	
 	/**
 	 * The connection to the database
 	 */
@@ -86,81 +94,335 @@ public class PrintOrder {
 	private Scanner scan;
 
 	/**
-	 * The list of menu ids
-	 *
-	 * We have to check that the menu chosen by the user was printed in the
-	 * list, so we keep this array with the prindted ids.
+	 * The user mail
 	 */
-	private ArrayList<String> menuIds;
+
+	private String email;
 
 	/**
-	 * The map of dish prices.
-	 *
-	 * We need to get the price of the dishes to populate the contain relation.
-	 *	 
-	 * We want to check the id of the dish to insert instead of making the query
-	 * fail.
+	 * The user password
 	 */
-	private HashMap<String, BigDecimal> dishList;
+
+	private String password;
 
 	/**
-	 * The map of chosen dish => quantity
+	 * 
+	 * @param user_email
 	 */
-	private HashMap<String, Short> ordered;
+	private void printOrders(String user_email) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
-	/**
-	 * The name of the customer
-	 */
-	private String name;
+		try{
+			pstmt = con.prepareStatement(LIST_ORDERS);
+			pstmt.setString(1, user_email);
+			rs = pstmt.executeQuery();
+			
+			System.out.println("Order ID\tOrder Timestamp\tTotal Price\tPayment Method");
+			while (rs.next()) {
+				System.out.printf("%d\t%t\t%s\t%s", rs.getString("order_id"),
+						rs.getString("order_timestamp"), rs.getString("total_price"), rs.getString("type"));
+			}
+		} finally{
+			if (rs != null) {
+				rs.close();
+			}
 
-	/**
-	 * The number of people in this order
-	 */
-	private int places;
-
-	/**
-	 * The total amount of the order
-	 */
-	BigDecimal total;
-
-	/**
-	 * Initializes variables
-	 */
-	private PrintOrder() {
-		menuIds = new ArrayList<>();
-		dishList = new HashMap<>();
-		ordered = new HashMap<>();
-		total = BigDecimal.ZERO;
+			if (pstmt != null) {
+				pstmt.close();
+			}
+		}
 	}
 
 	/**
+	 * 
+	 * @param order_id
+	 */
+	private void printOrderDetail(String order_id) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try{
+			pstmt = con.prepareStatement(LIST_ORDER_DETAIL);
+			pstmt.setString(1, order_id);
+			rs = pstmt.executeQuery();
+			
+			System.out.println("Order ID\tProduct Name\tProduct Quantity\tUnit Price\tProducer");
+			while (rs.next()) {
+				System.out.printf("%d\t%s\t%s\t%s", rs.getString("order_id"),
+						rs.getString("name"), rs.getString("quantity"), rs.getString("Unit Price"), rs.getString("business_name"));
+			}
+		} finally{
+			if (rs != null) {
+				rs.close();
+			}
+
+			if (pstmt != null) {
+				pstmt.close();
+			}
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void printEvents(String Region) throws SQLException {
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try{
+			pstmt = con.prepareStatement(LIST_EVENTS);
+			pstmt.setString(1, Region);
+			rs = pstmt.executeQuery();
+			
+			System.out.println("Event Name\tDescription\tStart Date\tEnd Date\tLocation\tRegion");
+			while (rs.next()) {
+				System.out.printf("%s\t%s\t%t\t%t\t%s\t%s\t%s", rs.getString("name"),
+						rs.getString("description"), rs.getString("start_date"), rs.getString("end_date"), rs.getString("location"), rs.getString("region"));
+			}
+		} finally{
+			if (rs != null) {
+				rs.close();
+			}
+
+			if (pstmt != null) {
+				pstmt.close();
+			}
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void logout() {
+		email = null;
+		password = null;
+	}
+
+
+
+
+
+	/**
+	 * 
+	 * @param user_psw
+	 * @return true if the insert password 
+	 * @throws SQLException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalStateException
+	 */
+
+	private Boolean checkPassword(String user_psw) throws SQLException, IllegalArgumentException, IllegalStateException , NoSuchAlgorithmException{
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String real_psw ="";
+		
+		try {
+			pstmt = con.prepareStatement(SELECT_PSW);
+			pstmt.setString(1, user_psw);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				real_psw = rs.getString("password");
+			} 
+			else {
+				throw new IllegalStateException();
+			}			
+			if(user_psw == null || !(user_psw instanceof String) || user_psw.length() == 0){
+				throw new IllegalArgumentException("Incorrect argument passed to the function");
+			}
+			
+			byte[] psw_bytes = user_psw.getBytes(StandardCharsets.UTF_8);
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] psw_digested = md.digest(psw_bytes);
+			String psw_dig = new String(psw_digested);
+			
+			if(psw_dig == real_psw ){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		finally {
+			if (rs != null) {
+				rs.close();
+			}
+
+			if (pstmt != null) {
+				pstmt.close();
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param email user email to check
+	 * @return true if user is registered, false otherwise
+	 * @throws SQLException
+	 */
+		
+	private Boolean checkIfUserExists(String user_email) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			pstmt = con.prepareStatement(EMAIL_CHECK);
+			pstmt.setString(1, user_email);
+			rs = pstmt.executeQuery();
+			return rs.next();
+		} finally {
+			if (rs != null) {
+				rs.close();
+			}
+
+			if (pstmt != null) {
+				pstmt.close();
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @param user_email
+	 * @return
+	 * @throws SQLException
+	 */
+
+	private Boolean is_Customer(String user_email) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String user_role = "";
+		
+		try {
+			pstmt = con.prepareStatement(ROLE);
+			pstmt.setString(1,user_email);
+			rs = pstmt.executeQuery();
+
+			if(rs.next()){
+				user_role = rs.getString("role");
+			} 
+			if(user_role == "Customer"){
+				return true;
+			}
+			else{
+				return false;
+			}
+		} finally{
+			if (rs != null) {
+				rs.close();
+			}
+
+			if (pstmt != null) {
+				pstmt.close();
+			}
+		}		
+	}
+
+	private Boolean is_Producer(String user_email) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String user_role = "";
+		
+		try {
+			pstmt = con.prepareStatement(ROLE);
+			pstmt.setString(1,user_email);
+			rs = pstmt.executeQuery();
+
+			if(rs.next()){
+				user_role = rs.getString("role");
+			} 
+			if(user_role == "Producer"){
+				return true;
+			}
+			else{
+				return false;
+			}
+		} finally{
+			if (rs != null) {
+				rs.close();
+			}
+
+			if (pstmt != null) {
+				pstmt.close();
+			}
+		}		
+	}
+	/**
 	 * Run the whole simulation process
 	 */
-	private void runSimulation() {
+	private void runSimulation() throws IllegalArgumentException, IllegalStateException, NoSuchAlgorithmException {
 		scan = new Scanner(System.in);
 
 		connect();
 		try {
-			System.out.printf("Here is the list of the menus:%n%n");
-			printMenus();
-			System.out.println();
 
-			String chosenMenu = null;
-			while (menuIds.indexOf(chosenMenu) == -1) {
-				System.out.println("What menu do you want to use?");
-				chosenMenu = scan.nextLine();
 
-				if (menuIds.indexOf(chosenMenu) == -1) {
-					System.out.println("The selected menu is not valid!");
+			//Login
+
+			/** 
+			 * Chiedere cosa vuole visualizzare l'utente tra:
+			 * (Se Customer)
+			 * - Mostrare gli ordini fatti
+			 * - Mostrare un ordine in dettagli
+			 * - Mostrare gli eventi futuri in una regione
+			 * 
+			 * (Se Producer o Regional Manager)
+			 * - Visualizzare le statistice di un producer
+			*/
+
+			//Logout
+
+			//Login
+
+			System.out.printf("Welcome!");
+			System.out.printf("Please insert your email to login.");
+			email = scan.nextLine();
+			while(!checkIfUserExists(email)) {
+				System.out.printf("Please insert a registered email.");
+				email = scan.nextLine();
+			}
+		
+			System.out.printf("Please insert your password.");
+			String user_password = scan.nextLine();
+
+			while(checkPassword(user_password)) {
+				System.out.printf("Please insert the correct password.");
+				user_password = scan.nextLine();
+			}
+
+			//User logged in
+			
+
+			if(is_Customer(email)){
+					Boolean goodCommand = false;
+					while(!goodCommand) {
+					System.out.printf("Please what do you want to do?");
+					System.out.printf("Digit 1 for visualize Order History");
+					System.out.printf("Digit 2 for visualize a Order Detail");
+					System.out.printf("Digit 3 for visualize a Future Events");
+					System.out.printf("Digit q to logout");
+					String choice = scan.nextLine();
+					if(choice == "1") {
+						printOrders(email);
+					} else if (choice == "2") {
+						System.out.printf("Insert your order ID");
+						String order_id = scan.nextLine();
+						printOrderDetail(order_id);
+					} else if (choice == "3") {
+						System.out.printf("Insert the Region");
+						String region = scan.nextLine();
+						printEvents(region);
+					} else if (choice == "q") {
+						logout();
+						goodCommand = true;
+					}	
 				}
+
+			} else if(is_Producer(email)) {
+				System.out.println("Xe un produtore!"); // TODO: remove
 			}
 
-			listDishes(chosenMenu);
-			askDishes();
-
-			if (!ordered.isEmpty()) {
-				placeOrder();
-			}
 		} catch (SQLException e) {
 			System.out.println("Database access error:");
 
@@ -209,186 +471,10 @@ public class PrintOrder {
 			System.exit(-2);
 		}
 	}
-
-	/**
-	 * Print the list of enabled menus
-	 *
-	 * @throw SQLException if anything goes wrong while printing the list
-	 */
-	private void printMenus() throws SQLException {
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery(LIST_MENUS);
-
-			System.out.println("Id\tName\tDescription");
-			while (rs.next()) {
-				System.out.printf("%s\t%s\t%s%n", rs.getString("id"),
-						rs.getString("name"), rs.getString("description"));
-				menuIds.add(rs.getString("id"));
-			}
-		} finally {
-			if (rs != null) {
-				rs.close();
-			}
-
-			if (stmt != null) {
-				stmt.close();
-			}
-		}
-	}
-
-	/**
-	 * List the dishes from a certain menu
-	 *
-	 * @param menuId the id of the menu to list the dishes from
-	 * @throws SQLException if anything goes wrong while printing the list
-	 */
-	private void listDishes(String menuId) throws SQLException {
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-
-		System.out.println("Here are the dishes you can order:");
-		System.out.println();
-
-		try {
-			pstmt = con.prepareStatement(LIST_DISHES);
-			pstmt.setString(1, menuId);
-			rs = pstmt.executeQuery();
-
-			System.out.println("Id\tName\tPrice\tDescription");
-			while (rs.next()) {
-				System.out.printf("%s\t%s\t%.2f €\t%s%n", rs.getString("id"),
-							rs.getString("name"), rs.getBigDecimal("price"),
-							rs.getString("description"));
-				dishList.put(rs.getString("id"), rs.getBigDecimal("price"));
-			}
-			System.out.println();
-		} finally {
-			if (rs != null) {
-				rs.close();
-			}
-
-			if (pstmt != null) {
-				pstmt.close();
-			}
-		}
-	}
-
-	/**
-	 * Ask the user the dishes she/he wants to order
-	 */
-	private void askDishes() {
-		System.out.println("Please insert all the dishes you want to order, one id and quantity per line.");
-		System.out.println("To end an order, leave an empty line.");
-
-		while(scan.hasNextLine()) {
-			String line = scan.nextLine();
-
-			if (line.isEmpty()) {
-				break;
-			}
-
-			Scanner s = new Scanner(line);
-			String dish = s.next();
-
-			if (dishList.get(dish) == null || !s.hasNextInt()) {
-				System.out.println("Invalid dish! Skipping line");
-				s.close();
-				continue;
-			}
-
-			short quantity = s.nextShort();
-			s.close();
-
-			if (quantity < 1) {
-				System.out.println("Invalid quantity! Skipping line");
-				continue;
-			}
-
-			Short old = ordered.get(dish);
-			if (old != null) {
-				quantity += old;
-			}
-			ordered.put(dish, quantity);
-		}
-
-		if (!ordered.isEmpty()) {
-			System.out.println("Perfect, please new enter your name:");
-			name = scan.nextLine();
-			
-			System.out.println("Finally, how many are you?");
-			places = scan.nextInt();
-
-			if (places < 1) {
-				System.out.println("Invalid value, falling back to 1.");
-				places = 1;
-			}
-
-			for (HashMap.Entry<String, Short> entry : ordered.entrySet()) {
-				total = total.add(dishList.get(entry.getKey()).multiply(
-						new BigDecimal(entry.getValue().shortValue())));
-			}
-			System.out.printf("Nice. The total of your order is %.2f€.%n", total);
-		}
-	}
-
-	/**
-	 * Put the order in the database
-	 *
-	 * @throw SQLException if anything goes wrong while placing the order
-	 */
-	private void placeOrder() throws SQLException {
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-
-		try {
-			con.setAutoCommit(false);
-
-			pstmt = con.prepareStatement(PLACE_ORDER);
-
-			// Bad id but puttern, but this is just a demo
-			String id = String.format("%d", System.currentTimeMillis());
-
-			pstmt.setString(1, id);
-			pstmt.setString(2, name);
-			pstmt.setInt(3, places);
-			pstmt.setBigDecimal(4, total);
-			pstmt.execute();
-			pstmt.close();
-
-			pstmt = con.prepareStatement(DISH_ORDER);
-
-			for (HashMap.Entry<String, Short> entry : ordered.entrySet()) {
-				pstmt.setString(1, id);
-				pstmt.setString(2, entry.getKey());
-				pstmt.setShort(3, entry.getValue());
-				pstmt.setBigDecimal(4, dishList.get(entry.getKey()));
-				pstmt.addBatch();
-			}
-
-			pstmt.executeBatch();
-			pstmt.close();
-			pstmt = null;
-
-			con.commit();
-
-			System.out.println("Thank you! Order placed! You have been served by Thomas");
-		} finally {
-			if (pstmt != null) {
-				pstmt.close();
-			}
-
-			con.setAutoCommit(true);
-		}
-	}
-
 	/**
 	 * The function that starts running the order simulation process
 	 */
-	public static void main(String args[]) {
+	public static void main(String args[]) throws IllegalArgumentException, IllegalStateException, NoSuchAlgorithmException {
 		PrintOrder s = new PrintOrder();
 		s.runSimulation();
 	}

@@ -296,7 +296,7 @@ BEGIN
 
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE PLPGSQL;
 
 CREATE TRIGGER sell_check BEFORE INSERT -- Constraint 4
 ON Sell

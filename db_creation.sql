@@ -281,7 +281,10 @@ CREATE TABLE Sale_Through(
 COMMENT ON TABLE Sale_Through IS 'List of sales channels provided by each "producer"';
 -- TO DO TRIGGER
 
+<<<<<<< HEAD
 --Procedure to check if the product belongs to the same category its producer is associated to
+=======
+>>>>>>> 5d9a1a7ee2676a79c753bb290f6cfa6a6c376f3b
 CREATE FUNCTION category_check() RETURNS TRIGGER AS $$
 BEGIN
 
@@ -299,7 +302,7 @@ BEGIN
 
     RETURN NEW; -- proceed to the insert
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE PLPGSQL;
 
 CREATE TRIGGER sell_check BEFORE INSERT -- Constraint 4
 ON Sell

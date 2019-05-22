@@ -58,13 +58,23 @@ public class PrintOrder {
 			+ "LIMIT 15; ";
 
 	/**
-	 * The statement to list the details of an order
+	 * The statement to list the details of an customer order
 	 */
 	private static final String LIST_ORDER_DETAIL = "SELECT c.order_id, p.product_code, name, quantity, price AS \"Unit Price\", business_name FROM Contain as c "
 			+ "INNER JOIN Make AS m On c.order_id = m.order_id "
 			+ "INNER JOIN Product AS p ON c.product_code = p.product_code "
 			+ "INNER JOIN Producer AS prdcr ON m.producer_email = prdcr.email "
 			+ "WHERE c.order_id::varchar = ? AND m.customer_email = ? "
+			+ "ORDER BY name ASC; ";
+
+	/**
+	 * The statement to list the details of an producer order
+	 */
+	private static final String LIST_PRDUCER_ORDER_DETAIL = "SELECT c.order_id, p.product_code, name, quantity, price AS \"Unit Price\", business_name FROM Contain as c "
+			+ "INNER JOIN Make AS m On c.order_id = m.order_id "
+			+ "INNER JOIN Product AS p ON c.product_code = p.product_code "
+			+ "INNER JOIN Producer AS prdcr ON m.producer_email = prdcr.email "
+			+ "WHERE c.order_id::varchar = ? AND m.producer_email = ? "
 			+ "ORDER BY name ASC; ";
 
 	/**
@@ -82,7 +92,7 @@ public class PrintOrder {
 			+ "INNER JOIN Contain AS c ON m.order_id = c.order_id "
 			+ "INNER JOIN Product AS p ON p.product_code = c.product_code "
 			+ "WHERE m.producer_email = ? AND o.order_status = 'Completed' "
-			+ "GROUP BY c.product_code "
+			+ "GROUP BY c.product_code, p.name "
 			+ "ORDER BY \"Total Sell\" DESC "
 			+ "LIMIT 5; ";
 
@@ -158,10 +168,7 @@ public class PrintOrder {
 			pstmt.setString(2, email);
 			rs = pstmt.executeQuery();
 
-			if (!rs.next())
-				System.out.println("You don't have an order with order ID equal to "+order_id+"!\n");
-			else
-				System.out.println("Order ID\tProduct Name\tProduct Quantity\tUnit Price\tProducer");
+			System.out.println("Order ID\tProduct Name\tProduct Quantity\tUnit Price\tProducer");
 
 			while (rs.next()) {
 				System.out.printf("%s\t%s\t%s\t%s\n", rs.getString("order_id"),
@@ -280,7 +287,38 @@ public class PrintOrder {
 		}
 	}
 
+	/**
+	 *
+	 * @param order_id
+	 */
+	private void printProducerOrderDetail(String order_id) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
+		try{
+			pstmt = con.prepareStatement(LIST_PRDUCER_ORDER_DETAIL);
+			pstmt.setString(1, order_id);
+			pstmt.setString(2, email);
+			rs = pstmt.executeQuery();
+
+			System.out.println("Order ID\tProduct Name\tProduct Quantity\tUnit Price\tProducer");
+
+			while (rs.next()) {
+				System.out.printf("%s\t%s\t%s\t%s\n", rs.getString("order_id"),
+						rs.getString("name"), rs.getString("quantity"),
+						rs.getString("Unit Price"), rs.getString("business_name"));
+			}
+
+		} finally{
+			if (rs != null) {
+				rs.close();
+			}
+
+			if (pstmt != null) {
+				pstmt.close();
+			}
+		}
+	}
 
 
 	/**
@@ -511,7 +549,7 @@ public class PrintOrder {
 					} else if (choice.equals("3")) {
 						System.out.printf("Insert the order ID\n");
 						String order_id = scan.nextLine();
-						printOrderDetail(order_id);
+						printProducerOrderDetail(order_id);
 					} else if (choice.equals("q")) {
 						logout();
 						loggedOut = true;

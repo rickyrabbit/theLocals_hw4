@@ -135,7 +135,9 @@ CREATE TABLE Orders(
 	order_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
 	order_status order_type NOT NULL,
     PRIMARY KEY (order_id),
-    FOREIGN KEY (order_status) REFERENCES Status(status) 
+    FOREIGN KEY (order_status) REFERENCES Status(status),
+    CONSTRAINT order_cancel_type
+        ON DELETE CASCADE --TODO: rivedere
 );
 COMMENT ON TABLE Orders IS 'Summary of an order';
 
@@ -279,7 +281,8 @@ CREATE TABLE Sale_Through(
 COMMENT ON TABLE Sale_Through IS 'List of sales channels provided by each "producer"';
 -- TO DO TRIGGER
 
-CREATE FUNCTION category_check() RETURNS trigger1 AS $$
+--Procedure to check if the product belongs to the same category its producer is associated to
+CREATE FUNCTION category_check() RETURNS TRIGGER AS $$
 BEGIN
 
     PERFORM c.category_id, pt.category_id
@@ -290,11 +293,11 @@ BEGIN
     INNER JOIN Product as pt ON s.product_code = pt.product_code
     WHERE s.email = NEW.email AND s.product_code = NEW.product_code AND c.category_id = pt.category_id;
 
-    IF NOT FOUND THEN
+    IF NOT FOUND THEN -- if the query found 0 rows
         RAISE EXCEPTION 'The product category is not associated to your account';
     END IF;
 
-    RETURN NEW;
+    RETURN NEW; -- proceed to the insert
 END;
 $$ LANGUAGE plpgsql;
 
@@ -303,5 +306,42 @@ ON Sell
     FOR EACH ROW
 EXECUTE PROCEDURE category_check();
 
--- Constraint 5 App level?
- 
+
+-- Constraint 5 App level
+
+
+
+
+CREATE FUNCTION cancel_order(id INT) RETURN void AS $$ 
+    BEGIN
+    DELETE FROM Orders
+    WHERE Orders.order_id = id
+    END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE FUNCTION quantity_check() RETURNS TRIGGER AS $$
+    DECLARE
+    mystock INT;
+
+    BEGIN
+            
+        SELECT s.stock INTO mystock 
+        FROM Sell AS s
+        INNER JOIN Producer as p ON s.email = p.email
+        INNER JOIN Make as m ON p.email = m.producer_email
+        INNER JOIN Order as o ON m.order_id = o.order_id
+        INNER JOIN Contain as c ON o.order = c.order_id
+        WHERE c.order_id = NEW.order_id AND c.product_code = NEW.product_code; 
+
+        IF NEW.quantity > mystock THEN
+            cancel_order(NEW.order_id);
+        END IF;
+
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER contain_check BEFORE INSERT -- Constraint 6
+ON Contain
+    FOR EACH ROW
+EXECUTE PROCEDURE quantity_check();

@@ -49,33 +49,42 @@ public class PrintOrder {
 			+ "LIMIT 15; ";
 
 	/**
+	 * The statement to list the last 15 orders received by a producer
+	 */
+	private static final String LIST_PRODUCER_ORDERS = "SELECT o.order_id, o.order_timestamp, o.total_price, m.type FROM Make AS m "
+			+ "INNER JOIN Orders AS o ON m.order_id = o.order_id "
+			+ "WHERE producer_email = ? "
+			+ "ORDER BY order_id DESC "
+			+ "LIMIT 15; ";
+
+	/**
 	 * The statement to list the details of an order
 	 */
 	private static final String LIST_ORDER_DETAIL = "SELECT c.order_id, p.product_code, name, quantity, price AS \"Unit Price\", business_name FROM Contain as c "
 			+ "INNER JOIN Make AS m On c.order_id = m.order_id "
 			+ "INNER JOIN Product AS p ON c.product_code = p.product_code "
 			+ "INNER JOIN Producer AS prdcr ON m.producer_email = prdcr.email "
-			+ "WHERE c.order_id::varchar = ? "
+			+ "WHERE c.order_id::varchar = ? AND m.customer_email = ? "
 			+ "ORDER BY name ASC; ";
 
 	/**
 	 * The query to list the future events that will take place in a region
 	 */
-	//TODO: Sistemare query
-	private static final String LIST_EVENTS = "SELECT e.event_id, e.name, description, start_date, end_date, location, region_name FROM Event AS e "
+	private static final String LIST_EVENTS = "SELECT DISTINCT e.event_id, e.name, description, start_date, end_date, location, region_name FROM Event AS e "
 			+ "INNER JOIN Promote AS prm ON prm.event_id = e.event_id "
 			+ "WHERE end_date >= CURRENT_DATE AND region_name = ?; ";
 
 	/**
-	 * The query to list the 3 most sold product by a producer
+	 * The query to list the 5 most sold product by a producer
 	 */
-	private static final String LIST_PRODUCER_STATS = "SELECT c.product_code, SUM(c.quantity) AS \"Total Sell\" FROM Make AS m "
+	private static final String LIST_PRODUCER_STATS = "SELECT c.product_code, p.name, SUM(c.quantity) AS \"Total Sell\" FROM Make AS m "
 			+ "INNER JOIN Orders AS o ON m.order_id = o.order_id "
 			+ "INNER JOIN Contain AS c ON m.order_id = c.order_id "
+			+ "INNER JOIN Product AS p ON p.product_code = c.product_code "
 			+ "WHERE m.producer_email = ? AND o.order_status = 'Completed' "
 			+ "GROUP BY c.product_code "
 			+ "ORDER BY \"Total Sell\" DESC "
-			+ "LIMIT 3; ";
+			+ "LIMIT 5; ";
 
 	private static final String EMAIL_CHECK = "SELECT * FROM End_User WHERE email = ?;";
 
@@ -119,9 +128,11 @@ public class PrintOrder {
 			rs = pstmt.executeQuery();
 
 			System.out.println("Order ID\tOrder Timestamp\tTotal Price\tPayment Method");
-			
+
 			while (rs.next()) {
-				System.out.printf("%s\t%s\t%s\t%s\n", rs.getString("order_id"), rs.getString("order_timestamp"), rs.getString("total_price"), rs.getString("type"));
+				System.out.printf("%s\t%s\t%s\t%s\n", rs.getString("order_id"),
+						rs.getString("order_timestamp"), rs.getString("total_price"),
+						rs.getString("type"));
 			}
 		} finally{
 			if (rs != null) {
@@ -144,13 +155,20 @@ public class PrintOrder {
 		try{
 			pstmt = con.prepareStatement(LIST_ORDER_DETAIL);
 			pstmt.setString(1, order_id);
+			pstmt.setString(2, email);
 			rs = pstmt.executeQuery();
 
-			System.out.println("Order ID\tProduct Name\tProduct Quantity\tUnit Price\tProducer");
+			if (!rs.next())
+				System.out.println("You don't have an order with order ID equal to "+order_id+"!\n");
+			else
+				System.out.println("Order ID\tProduct Name\tProduct Quantity\tUnit Price\tProducer");
+
 			while (rs.next()) {
 				System.out.printf("%s\t%s\t%s\t%s\n", rs.getString("order_id"),
-						rs.getString("name"), rs.getString("quantity"), rs.getString("Unit Price"), rs.getString("business_name"));
+						rs.getString("name"), rs.getString("quantity"),
+						rs.getString("Unit Price"), rs.getString("business_name"));
 			}
+
 		} finally{
 			if (rs != null) {
 				rs.close();
@@ -178,7 +196,9 @@ public class PrintOrder {
 			System.out.println("Event Name\tDescription\tStart Date\tEnd Date\tLocation\tRegion");
 			while (rs.next()) {
 				System.out.printf("%s\t%s\t%s\t%s\t%s\t%s\n", rs.getString("name"),
-						rs.getString("description"), rs.getString("start_date"), rs.getString("end_date"), rs.getString("location"), rs.getString("region_name"));
+						rs.getString("description"), rs.getString("start_date"),
+						rs.getString("end_date"), rs.getString("location"),
+						rs.getString("region_name"));
 			}
 		} finally{
 			if (rs != null) {
@@ -200,13 +220,73 @@ public class PrintOrder {
 	}
 
 
+	/**
+	 *
+	 * @param producer_email
+	 */
+	private void printStats(String producer_email) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try{
+			pstmt = con.prepareStatement(LIST_PRODUCER_STATS);
+			pstmt.setString(1, producer_email);
+			rs = pstmt.executeQuery();
+
+			System.out.println("Product Code\tProduct Name\tTotal Sell");
+
+			while (rs.next()) {
+				System.out.printf("%s\t%s\t%s\n", rs.getString("product_code"),
+						rs.getString("name"), rs.getString("Total Sell"));
+			}
+		} finally{
+			if (rs != null) {
+				rs.close();
+			}
+			if (pstmt != null) {
+				pstmt.close();
+			}
+		}
+	}
+
+
+	/**
+	 *
+	 * @param producer_email
+	 */
+	private void printProducerOrders(String producer_email) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try{
+			pstmt = con.prepareStatement(LIST_PRODUCER_ORDERS);
+			pstmt.setString(1, producer_email);
+			rs = pstmt.executeQuery();
+
+			System.out.println("Order ID\tOrder Timestamp\tTotal Price\tPayment Method");
+
+			while (rs.next()) {
+				System.out.printf("%s\t%s\t%s\t%s\n", rs.getString("order_id"),
+						rs.getString("order_timestamp"), rs.getString("total_price"),
+						rs.getString("type"));
+			}
+		} finally{
+			if (rs != null) {
+				rs.close();
+			}
+			if (pstmt != null) {
+				pstmt.close();
+			}
+		}
+	}
+
 
 
 
 	/**
 	 *
 	 * @param user_psw
-	 * @return true if the insert password 
+	 * @return true if the insert password
 	 * @throws SQLException
 	 * @throws IllegalArgumentException
 	 * @throws IllegalStateException
@@ -332,7 +412,7 @@ public class PrintOrder {
 			if(rs.next()){
 				user_role = rs.getString("role");
 			}
-			if(user_role == "Producer"){
+			if(user_role.equals( "Producer")){
 				return true;
 			}
 			else{
@@ -391,12 +471,13 @@ public class PrintOrder {
 				user_password = scan.nextLine();
 			}
 
+			Boolean loggedOut = false;
+
 			if(is_Customer(email)){
-				Boolean goodCommand = false;
-				while(!goodCommand) {
-					System.out.printf("Please what do you want to do?\n");
+				while(!loggedOut) {
+					System.out.printf("What do you want to do?\n");
 					System.out.printf("Digit 1 for visualize Order History\n");
-					System.out.printf("Digit 2 for visualize a Order Detail\n");
+					System.out.printf("Digit 2 for visualize a Order Details\n");
 					System.out.printf("Digit 3 for visualize a Future Events\n");
 					System.out.printf("Digit q to logout\n");
 					String choice = scan.nextLine();
@@ -412,12 +493,30 @@ public class PrintOrder {
 						printEvents(region);
 					} else if (choice.equals("q")) {
 						logout();
-						goodCommand = true;
+						loggedOut = true;
 					}
 				}
-
 			} else if(is_Producer(email)) {
-				System.out.println("Xe un produtore!"); //TODO: remove
+				while(!loggedOut) {
+					System.out.printf("What do you want to do?\n");
+					System.out.printf("Digit 1 for visualize your sell stats\n");
+					System.out.printf("Digit 2 for visualize last 15 orders you received\n");
+					System.out.printf("Digit 3 for visualize a Order Details\n");
+					System.out.printf("Digit q to logout\n");
+					String choice = scan.nextLine();
+					if(choice.equals("1")) {
+						printStats(email);
+					} else if (choice.equals("2")) {
+						printProducerOrders(email);
+					} else if (choice.equals("3")) {
+						System.out.printf("Insert the order ID\n");
+						String order_id = scan.nextLine();
+						printOrderDetail(order_id);
+					} else if (choice.equals("q")) {
+						logout();
+						loggedOut = true;
+					}
+				}
 			}
 
 		} catch (SQLException e) {

@@ -277,4 +277,31 @@ CREATE TABLE Sale_Through(
     FOREIGN KEY (email) REFERENCES Producer(email)
 );
 COMMENT ON TABLE Sale_Through IS 'List of sales channels provided by each "producer"';
--- TO DO TRIGGER!
+-- TO DO TRIGGER
+
+CREATE FUNCTION category_check() RETURNS trigger1 AS $$
+BEGIN
+
+    PERFORM c.category_id, pt.category_id
+    FROM Category AS c 
+    INNER JOIN Belong1 AS b ON c.category_id = b.category_id
+    INNER JOIN  Producer AS p ON b.email = p.email
+    INNER JOIN Sell AS s ON p.email = s.email
+    INNER JOIN Product as pt ON s.product_code = pt.product_code
+    WHERE s.email = NEW.email AND s.product_code = NEW.product_code AND c.category_id = pt.category_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'The product category is not associated to your account';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER sell_check BEFORE INSERT -- Constraint 4
+ON Sell
+    FOR EACH ROW
+EXECUTE PROCEDURE category_check();
+
+-- Constraint 5 App level?
+ 

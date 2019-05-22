@@ -619,7 +619,7 @@ public class UserActions {
 	 * The function that starts running the order simulation process
 	 */
 	public static void main(String args[]) throws IllegalArgumentException, IllegalStateException, NoSuchAlgorithmException {
-		PrintOrder s = new PrintOrder();
-		s.runSimulation();
+		UserActions ua = new UserActions();
+		ua.runSimulation();
 	}
 }

@@ -279,7 +279,7 @@ CREATE TABLE Sale_Through(
 COMMENT ON TABLE Sale_Through IS 'List of sales channels provided by each "producer"';
 -- TO DO TRIGGER
 
-CREATE FUNCTION category_check() RETURNS trigger1 AS $$
+CREATE FUNCTION category_check() RETURNS TRIGGER AS $$
 BEGIN
 
     PERFORM c.category_id, pt.category_id

@@ -1,6 +1,9 @@
 -- connect to localProductions db
 \c localProductions
 
+-------------
+-- QUERIES --
+-------------
 
 -- Query to visualize Order History (last 15) of a user
 SELECT o.order_id, o.order_timestamp, o.total_price, m.type FROM Make AS m

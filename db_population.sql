@@ -1,7 +1,9 @@
 -- Connect to thelocals db to create data for its 'public' schema
 \c localproductions
 
--- Insert operations
+-----------------------
+-- INSERT OPERATIONS --
+-----------------------
 
 -- Region Relation
 INSERT INTO Region(name) VALUES 

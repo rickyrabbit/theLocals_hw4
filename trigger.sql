@@ -1,8 +1,8 @@
 -- Connect to thelocals db to create data for its 'public' schema
 \c localproductions 
--------------------------------------
+-----------------------
 -- TRIGGERS CREATION --
--------------------------------------
+-----------------------
 
 --Constraint 4
 CREATE FUNCTION category_check() RETURNS TRIGGER AS $$

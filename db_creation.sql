@@ -8,6 +8,8 @@ CREATE DATABASE localProductions OWNER POSTGRES ENCODING = 'UTF8';
 -- Connect to thelocals db to create data for its 'public' schema
 \c localproductions 
 
+-- Setting the monetary locale for the current session
+SET lc_monetary to "it_IT";
 
 ---------------------
 -- DOMAIN CREATION --

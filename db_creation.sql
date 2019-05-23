@@ -1,26 +1,21 @@
+-----------------------
+-- DATABASE CREATION --
+-----------------------
 
--- Database Creation
 CREATE DATABASE localProductions OWNER POSTGRES ENCODING = 'UTF8';
 
+
 -- Connect to thelocals db to create data for its 'public' schema
-\c localproductions --con la P maiuscola ritorna errore evidentemente in riga 3 non è case sensitive mentre qui sì.
+\c localproductions 
 
--- TODO: check if we new to add DOMAIN line 13 db_creation.sql
 
--- TODO: check ENUM
-
---Domain Creation
-
---TODO: eliminated Domain
---CREATE DOMAIN identifier AS VARCHAR(20)
---	NOT NULL;
---COMMENT ON DOMAIN identifier IS 'alphanumeric identifier domain, max 20 chars';
-
+---------------------
+-- DOMAIN CREATION --
+---------------------
 
 CREATE DOMAIN emailD AS text --TODO: check how to write email domains
     NOT NULL;
 COMMENT ON DOMAIN emailD IS 'alphanumeric emailD domain';
--- CREATE DOMAIN name_type AS VARCHAR()
 
 CREATE DOMAIN passwordD AS character varying(254)
 	CONSTRAINT properpassword CHECK (((VALUE)::text ~* '[A-Za-z0-9._%-]{5,}'::text));
@@ -32,9 +27,10 @@ CREATE DOMAIN reviewScoreD AS SMALLINT
 COMMENT ON DOMAIN reviewScoreD IS 'A review score can be an int between 1 and 5';
 
 
+------------------------
+-- DATA TYPE CREATION --
+------------------------
 
--- Create new data type
---la precedente sintassi era sbagliata
 CREATE TYPE role_type AS ENUM('Restaurateur','Regional Manager','Event Organizer','Customer','Producer');
 COMMENT ON TYPE role_type IS 'enum for role types';
 
@@ -45,9 +41,9 @@ CREATE TYPE channel_type AS ENUM('Pay In store','Cash On delivery');
 COMMENT ON TYPE  channel_type IS 'enum for sales channel types';
 
 
-
-
---Table Creation
+--------------------
+-- TABLE CREATION --
+--------------------
 
 CREATE TABLE Region(
     name text,
@@ -97,7 +93,7 @@ CREATE TABLE Restaurant(
     email emailD,
     location text NOT NULL,
     description text,
-    images text, -- TODO: Check if correct DONE
+    images text,
     telephone_number text NOT NULL,
     region_name text NOT NULL,
     PRIMARY KEY (restaurant_id),
@@ -129,19 +125,15 @@ CREATE TABLE End_User(
 );
 COMMENT ON TABLE End_User IS 'Every end user who has registered in the database';
 
-
 CREATE TABLE Orders(
     order_id SERIAL,
-    total_price money NOT NULL,--TODO: 
+    total_price money NOT NULL,
 	order_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
 	order_status order_type NOT NULL,
     PRIMARY KEY (order_id),
     FOREIGN KEY (order_status) REFERENCES Status(status)
-    --CONSTRAINT order_cancel_type
-    --    ON DELETE CASCADE --TODO: rivedere
 );
 COMMENT ON TABLE Orders IS 'Summary of an order';
-
 
 CREATE TABLE Contain(
     order_id INT,
@@ -153,7 +145,6 @@ CREATE TABLE Contain(
     FOREIGN KEY (product_code) REFERENCES Product(product_code)
 );
 COMMENT ON TABLE Contain IS 'List of products contained in an order';
-
 
 CREATE TABLE Producer(
     email emailD,
@@ -239,17 +230,16 @@ COMMENT ON TABLE Make IS 'List of orders made by users of role_type "costumer" f
 
 CREATE TABLE Sell(
     email emailD,
-    product_code INT NOT NULL, --si riferisce a un datatype serial quindi va messo come INT
+    product_code INT NOT NULL,
     price money NOT NULL,
     stock INT NOT NULL,
-    image bytea, -- TODO: Check if correct
+    image text, 
     producer_description text,
     PRIMARY KEY (email, product_code),
     FOREIGN KEY (email) REFERENCES Producer(email),
     FOREIGN KEY (product_code) REFERENCES Product(product_code)
 );
-COMMENT ON TABLE Sell IS '';
-
+COMMENT ON TABLE Sell IS 'List of products sold by each "producer"';
 
 CREATE TABLE Promote(
     email emailD,
@@ -261,7 +251,6 @@ CREATE TABLE Promote(
     FOREIGN KEY (event_id) REFERENCES Event(event_id)
 );
 COMMENT ON TABLE Promote IS 'List of products sold by a "producer"';
-
 
 CREATE TABLE Belong1(
     email emailD,
@@ -282,12 +271,11 @@ CREATE TABLE Sale_Through(
 COMMENT ON TABLE Sale_Through IS 'List of sales channels provided by each "producer"';
 
 
---------------------------
--- EXTERNAL CONSTRAINTS --
---------------------------
+-------------------------------------
+-- FUNCTIONS AND TRIGGERS CREATION --
+-------------------------------------
 
 --Constraint 4
---Procedure to check if the product belongs to the same category its producer is associated to
 CREATE FUNCTION category_check() RETURNS TRIGGER AS $$
 DECLARE 
 cat_id text;
@@ -314,9 +302,7 @@ ON Sell
     FOR EACH ROW
 EXECUTE PROCEDURE category_check();
 
-
 -- Constraint 6 and 10
---
 CREATE FUNCTION cancel_order(id INT) RETURNS void AS $$ 
     BEGIN
         DELETE FROM Orders
@@ -331,7 +317,6 @@ CREATE FUNCTION decrease_stock(p_email text, qnt_to_decrease INT, p_code INT) RE
         WHERE producer_email = p_email AND product_code = p_code;
     END;
 $$ LANGUAGE plpgsql;
-
 
 CREATE FUNCTION quantity_check() RETURNS TRIGGER AS $$
     DECLARE

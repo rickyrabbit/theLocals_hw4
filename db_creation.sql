@@ -159,7 +159,7 @@ CREATE TABLE Producer(
     FOREIGN KEY (email) REFERENCES End_User(email),
     FOREIGN KEY (region_name) REFERENCES Region(name)
 );
-COMMENT ON TABLE Producer IS 'local producer of foodstuff'; -- punto e virgola
+COMMENT ON TABLE Producer IS 'local producer of foodstuff';
 
 CREATE TABLE Review(
     email emailD,
@@ -262,7 +262,7 @@ CREATE TABLE Belong1(
 COMMENT ON TABLE Belong1 IS 'List of categories a "producer" belongs to';
 
 CREATE TABLE Sale_Through(
-    type channel_type, --Le colonne chiave "type" e "type" avevano tipi incompatibili: text e channel_type
+    type channel_type,
     email emailD,
     PRIMARY KEY (type, email),
     FOREIGN KEY (type) REFERENCES Sales_Channel(type),

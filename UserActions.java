@@ -242,7 +242,6 @@ public class UserActions {
 		password = null;
 	}
 
-
 	/**
 	 *	The method for printing the 5 most sold product by a producer
 	 */
@@ -273,7 +272,6 @@ public class UserActions {
 			}
 		}
 	}
-
 
 	/**
 	 * The method for printing the orders received by the producer
@@ -343,7 +341,6 @@ public class UserActions {
 			}
 		}
 	}
-
 
 	/**
 	 * The method that checks if the password inserted by the user is correct and correspond to the one saved in the database.

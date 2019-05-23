@@ -413,6 +413,6 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE TRIGGER order_status_canceled AFTER UPDATE 
-ON Order
+ON Orders
     FOR EACH ROW
 EXECUTE PROCEDURE order_status_check();

@@ -199,6 +199,13 @@ INSERT INTO Make(order_id, type, customer_email, producer_email) VALUES
 (9, 'Pay In store', 'Evelina.Piazza@gmail.com', 'Tatiana.Agnelli@gmail.com'),
 (10, 'Cash On delivery', 'Gianpaolo.Abano@gmail.com', 'Angelo.Antonini@gmail.com');
 
+-- Belong1 Relation
+INSERT INTO Belong1(email, category_id ) VALUES
+('Tatiana.Agnelli@gmail.com','A1'),
+('Angelo.Antonini@gmail.com','A6'),
+('Gualberto.Alescio@gmail.com','A2'),
+('Beatrice.Altoviti@gmail.com','A4');
+
 -- Sell Relation
 INSERT INTO Sell(email , product_code , price, stock, image,  producer_description) VALUES
 ('Tatiana.Agnelli@gmail.com', 1, '12,05', 7, NULL, 'Soppressa Vicentina D.O.P di coppa e spalla aromatizata con rosmarino. Prezzo indicato per 800g di prodotto.'),
@@ -218,12 +225,6 @@ INSERT INTO Promote(email, product_code, event_id) VALUES
 ('Tatiana.Agnelli@gmail.com', 2, 4),
 ('Gualberto.Alescio@gmail.com', 4, 4);
 
--- Belong1 Relation
-INSERT INTO Belong1(email, category_id ) VALUES
-('Tatiana.Agnelli@gmail.com','A1'),
-('Angelo.Antonini@gmail.com','A6'),
-('Gualberto.Alescio@gmail.com','A2'),
-('Beatrice.Altoviti@gmail.com','A4');
 
 -- Sale Through Relation
 INSERT INTO Sale_Through(type, email) VALUES

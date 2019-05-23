@@ -290,7 +290,7 @@ BEGIN
     WHERE b.email = NEW.email AND b.category_id = cat_id;
 
     IF NOT FOUND THEN -- if the query found 0 rows
-        RAISE EXCEPTION 'The product category is not associated to your account';
+        RAISE EXCEPTION 'The product category is not associated to the producer';
     END IF;
 
     RETURN NEW; -- proceed to the insert
@@ -314,7 +314,7 @@ CREATE FUNCTION decrease_stock(p_email text, qnt_to_decrease INT, p_code INT) RE
     BEGIN
         UPDATE Sell
         SET stock = stock - qnt_to_decrease
-        WHERE producer_email = p_email AND product_code = p_code;
+        WHERE email = p_email AND product_code = p_code;
     END;
 $$ LANGUAGE plpgsql;
 
@@ -327,7 +327,7 @@ CREATE FUNCTION quantity_check() RETURNS TRIGGER AS $$
 
         SELECT producer_email INTO p_email
         FROM Make
-        WHERE producer_email = NEW.email;
+        WHERE order_id = NEW.order_id;
 
         SELECT stock INTO mystock 
         FROM Sell
@@ -340,6 +340,8 @@ CREATE FUNCTION quantity_check() RETURNS TRIGGER AS $$
         ELSE
             PERFORM decrease_stock(p_email, NEW.quantity, NEW.product_code);
         END IF;
+
+        RETURN NEW; -- proceed to the insert
 
     END;
 $$ LANGUAGE plpgsql;
@@ -354,12 +356,16 @@ EXECUTE PROCEDURE quantity_check();
 CREATE FUNCTION promote_check() RETURNS TRIGGER AS $$
 
     BEGIN
+
         PERFORM * FROM Sell
         WHERE email = NEW.email AND product_code = NEW.product_code;
     
         IF NOT FOUND THEN -- if the query found 0 rows
             RAISE EXCEPTION 'The producer does not sell that product';
         END IF;
+
+        RETURN NEW; -- proceed to the insert
+
     END;
 $$ LANGUAGE plpgsql;
 

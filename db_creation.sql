@@ -129,15 +129,16 @@ CREATE TABLE End_User(
 );
 COMMENT ON TABLE End_User IS 'Every end user who has registered in the database';
 
+
 CREATE TABLE Orders(
     order_id SERIAL,
     total_price money NOT NULL,--TODO: 
 	order_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
 	order_status order_type NOT NULL,
     PRIMARY KEY (order_id),
-    FOREIGN KEY (order_status) REFERENCES Status(status),
-    CONSTRAINT order_cancel_type
-        ON DELETE CASCADE --TODO: rivedere
+    FOREIGN KEY (order_status) REFERENCES Status(status)
+    --CONSTRAINT order_cancel_type
+    --    ON DELETE CASCADE --TODO: rivedere
 );
 COMMENT ON TABLE Orders IS 'Summary of an order';
 
@@ -148,7 +149,7 @@ CREATE TABLE Contain(
     quantity INT NOT NULL,
     price money NOT NULL,
     PRIMARY KEY (order_id, product_code),
-    FOREIGN KEY (order_id) REFERENCES Orders(order_id),
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (product_code) REFERENCES Product(product_code)
 );
 COMMENT ON TABLE Contain IS 'List of products contained in an order';
@@ -229,7 +230,7 @@ CREATE TABLE Make(
     customer_email emailD,
     producer_email emailD,
     PRIMARY KEY (order_id, type, customer_email, producer_email),
-    FOREIGN KEY (order_id) REFERENCES Orders(order_id),
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (type) REFERENCES Sales_Channel(type),
     FOREIGN KEY (customer_email) REFERENCES End_User(email),
     FOREIGN KEY (producer_email) REFERENCES Producer(email) --virgola in più
@@ -289,16 +290,16 @@ COMMENT ON TABLE Sale_Through IS 'List of sales channels provided by each "produ
 --Procedure to check if the product belongs to the same category its producer is associated to
 CREATE FUNCTION category_check() RETURNS TRIGGER AS $$
 DECLARE 
-cat_id text
+cat_id text;
 
 BEGIN
 
     SELECT p.category_id INTO cat_id
     FROM Product AS p
-    WHERE p.product_code = NEW.product_code
+    WHERE p.product_code = NEW.product_code;
 
     PERFORM * FROM Belong1 AS b
-    WHERE b.email = NEW.email AND b.category_id = cat_id
+    WHERE b.email = NEW.email AND b.category_id = cat_id;
 
     IF NOT FOUND THEN -- if the query found 0 rows
         RAISE EXCEPTION 'The product category is not associated to your account';
@@ -306,7 +307,7 @@ BEGIN
 
     RETURN NEW; -- proceed to the insert
 END;
-$$ LANGUAGE PLPGSQL;
+$$ LANGUAGE plpgsql;
 
 CREATE TRIGGER sell_check BEFORE INSERT -- Constraint 4
 ON Sell
@@ -316,14 +317,14 @@ EXECUTE PROCEDURE category_check();
 
 -- Constraint 6 and 10
 --
-CREATE FUNCTION cancel_order(id INT) RETURN void AS $$ 
+CREATE FUNCTION cancel_order(id INT) RETURNS void AS $$ 
     BEGIN
         DELETE FROM Orders
-        WHERE Orders.order_id = id
+        WHERE Orders.order_id = id;
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE FUNCTION decrease_stock(p_email text, qnt_to_decrease INT, p_code INT) RETURN void AS $$ 
+CREATE FUNCTION decrease_stock(p_email text, qnt_to_decrease INT, p_code INT) RETURNS void AS $$ 
     BEGIN
         UPDATE Sell
         SET stock = stock - qnt_to_decrease
@@ -349,10 +350,10 @@ CREATE FUNCTION quantity_check() RETURNS TRIGGER AS $$
 
         -- If the quantity selected is greater than the available product cancel the order instance and all instances that reference to i
         IF NEW.quantity > mystock THEN
-            cancel_order(NEW.order_id);
+            PERFORM cancel_order(NEW.order_id);
             RAISE EXCEPTION 'The quantity selected cannot be purchased. Please select a lower quantity';
         ELSE
-            decrease_stock(p_email, NEW.quantity, NEW.product_code);
+            PERFORM decrease_stock(p_email, NEW.quantity, NEW.product_code);
         END IF;
 
     END;
@@ -365,7 +366,7 @@ EXECUTE PROCEDURE quantity_check();
 
 
 --Constraint 8
-CREATE FUNCTION promote_check() RETURN TRIGGER $$
+CREATE FUNCTION promote_check() RETURNS TRIGGER AS $$
 
     BEGIN
         PERFORM * FROM Sell
@@ -378,14 +379,14 @@ CREATE FUNCTION promote_check() RETURN TRIGGER $$
 $$ LANGUAGE plpgsql;
 
 
-CREATE TRIGGER event_promote_check() BEFORE INSERT 
+CREATE TRIGGER event_promote_check BEFORE INSERT 
 ON Promote
     FOR EACH ROW
 EXECUTE PROCEDURE promote_check();
 
 
 --Constraint 11
-CREATE FUNCTION order_status_check() RETURN TRIGGER $$
+CREATE FUNCTION order_status_check() RETURNS TRIGGER AS $$
     DECLARE
     qnt_to_increase INT;
     p_email text;
@@ -411,7 +412,7 @@ CREATE FUNCTION order_status_check() RETURN TRIGGER $$
 $$ LANGUAGE plpgsql;
 
 
-CREATE TRIGGER order_status_canceled() AFTER UPDATE 
+CREATE TRIGGER order_status_canceled AFTER UPDATE 
 ON Order
     FOR EACH ROW
 EXECUTE PROCEDURE order_status_check();

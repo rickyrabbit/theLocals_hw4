@@ -279,22 +279,26 @@ CREATE TABLE Sale_Through(
     FOREIGN KEY (email) REFERENCES Producer(email)
 );
 COMMENT ON TABLE Sale_Through IS 'List of sales channels provided by each "producer"';
--- TO DO TRIGGER
 
-<<<<<<< HEAD
+
+--------------------------
+-- EXTERNAL CONSTRAINTS --
+--------------------------
+
+--Constraint 4
 --Procedure to check if the product belongs to the same category its producer is associated to
-=======
->>>>>>> 5d9a1a7ee2676a79c753bb290f6cfa6a6c376f3b
 CREATE FUNCTION category_check() RETURNS TRIGGER AS $$
+DECLARE 
+cat_id text
+
 BEGIN
 
-    PERFORM c.category_id, pt.category_id
-    FROM Category AS c 
-    INNER JOIN Belong1 AS b ON c.category_id = b.category_id
-    INNER JOIN  Producer AS p ON b.email = p.email
-    INNER JOIN Sell AS s ON p.email = s.email
-    INNER JOIN Product as pt ON s.product_code = pt.product_code
-    WHERE s.email = NEW.email AND s.product_code = NEW.product_code AND c.category_id = pt.category_id;
+    SELECT p.category_id INTO cat_id
+    FROM Product AS p
+    WHERE p.product_code = NEW.product_code
+
+    PERFORM * FROM Belong1 AS b
+    WHERE b.email = NEW.email AND b.category_id = cat_id
 
     IF NOT FOUND THEN -- if the query found 0 rows
         RAISE EXCEPTION 'The product category is not associated to your account';
@@ -310,15 +314,20 @@ ON Sell
 EXECUTE PROCEDURE category_check();
 
 
--- Constraint 5 App level
-
-
-
-
+-- Constraint 6 and 10
+--
 CREATE FUNCTION cancel_order(id INT) RETURN void AS $$ 
     BEGIN
-    DELETE FROM Orders
-    WHERE Orders.order_id = id
+        DELETE FROM Orders
+        WHERE Orders.order_id = id
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION decrease_stock(p_email text, qnt_to_decrease INT, p_code INT) RETURN void AS $$ 
+    BEGIN
+        UPDATE Sell
+        SET stock = stock - qnt_to_decrease
+        WHERE producer_email = p_email AND product_code = p_code;
     END;
 $$ LANGUAGE plpgsql;
 
@@ -326,25 +335,83 @@ $$ LANGUAGE plpgsql;
 CREATE FUNCTION quantity_check() RETURNS TRIGGER AS $$
     DECLARE
     mystock INT;
+    p_email text;
 
     BEGIN
-            
-        SELECT s.stock INTO mystock 
-        FROM Sell AS s
-        INNER JOIN Producer as p ON s.email = p.email
-        INNER JOIN Make as m ON p.email = m.producer_email
-        INNER JOIN Order as o ON m.order_id = o.order_id
-        INNER JOIN Contain as c ON o.order = c.order_id
-        WHERE c.order_id = NEW.order_id AND c.product_code = NEW.product_code; 
 
+        SELECT producer_email INTO p_email
+        FROM Make
+        WHERE producer_email = NEW.email;
+
+        SELECT stock INTO mystock 
+        FROM Sell
+        WHERE product_code = NEW.product_code AND email = p_email; 
+
+        -- If the quantity selected is greater than the available product cancel the order instance and all instances that reference to i
         IF NEW.quantity > mystock THEN
             cancel_order(NEW.order_id);
+            RAISE EXCEPTION 'The quantity selected cannot be purchased. Please select a lower quantity';
+        ELSE
+            decrease_stock(p_email, NEW.quantity, NEW.product_code);
         END IF;
 
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER contain_check BEFORE INSERT -- Constraint 6
+CREATE TRIGGER contain_check BEFORE INSERT 
 ON Contain
     FOR EACH ROW
 EXECUTE PROCEDURE quantity_check();
+
+
+--Constraint 8
+CREATE FUNCTION promote_check() RETURN TRIGGER $$
+
+    BEGIN
+        PERFORM * FROM Sell
+        WHERE email = NEW.email AND product_code = NEW.product_code;
+    
+        IF NOT FOUND THEN -- if the query found 0 rows
+            RAISE EXCEPTION 'The producer does not sell that product';
+        END IF;
+    END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER event_promote_check() BEFORE INSERT 
+ON Promote
+    FOR EACH ROW
+EXECUTE PROCEDURE promote_check();
+
+
+--Constraint 11
+CREATE FUNCTION order_status_check() RETURN TRIGGER $$
+    DECLARE
+    qnt_to_increase INT;
+    p_email text;
+    p_code INT;
+        
+    BEGIN
+        
+        IF NEW.status = "Canceled" AND OLD.status = "Reserved" THEN
+            SELECT product_code, quantity INTO p_code, qnt_to_increase
+            FROM Contain 
+            WHERE order_id = NEW.order_id;
+
+            SELECT producer_email INTO p_email
+            FROM Make 
+            WHERE order_id = NEW.order_id;
+
+            UPDATE Sell
+            SET stock = stock + qnt_to_increase
+            WHERE producer_email = p_email AND product_code = p_code;
+        END IF;
+    
+    END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER order_status_canceled() AFTER UPDATE 
+ON Order
+    FOR EACH ROW
+EXECUTE PROCEDURE order_status_check();

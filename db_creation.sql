@@ -36,7 +36,7 @@ COMMENT ON DOMAIN reviewScoreD IS 'A review score can be an int between 1 and 5'
 CREATE TYPE role_type AS ENUM('Restaurateur','Regional Manager','Event Organizer','Customer','Producer');
 COMMENT ON TYPE role_type IS 'enum for role types';
 
-CREATE TYPE order_type AS ENUM('Reserved','Completed','Canceled');
+CREATE TYPE order_type AS ENUM('Reserved','Completed','Canceled');--Constaint 7
 COMMENT ON TYPE order_type IS 'enum for order types';
 
 CREATE TYPE channel_type AS ENUM('Pay In store','Cash On delivery');

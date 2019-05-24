@@ -22,7 +22,7 @@ WHERE c.order_id = 3 AND m.customer_email = 'Evelina.Piazza@gmail.com'
 ORDER BY name ASC;
 
 
--- Query to visualize present and future orders in a region
+-- Query to visualize present and future events in a region
 SELECT e.event_id, e.name, description, start_date, end_date, location, region_name FROM Event AS e
 WHERE end_date >= CURRENT_DATE AND region_name = 'Veneto';
 

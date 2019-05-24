@@ -71,7 +71,6 @@ public class UserActions {
 	 * The statement to list the future events that will take place in a region
 	 */
 	private static final String LIST_EVENTS = "SELECT DISTINCT e.event_id, e.name, description, start_date, end_date, location, region_name FROM Event AS e "
-			+ "INNER JOIN Promote AS prm ON prm.event_id = e.event_id "
 			+ "WHERE end_date >= CURRENT_DATE AND region_name = ?; ";
 
 	/**

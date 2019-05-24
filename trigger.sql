@@ -4,8 +4,10 @@
 -----------------------
 -- TRIGGERS CREATION --
 -----------------------
-
---Constraint 4
+/*
+Constraint 4: Each producer can sell products that belong to the same categories he is associated with.
+This stored procedure check if the inserted category_id of the product matches one of the category_id of the producer. 
+*/
 CREATE FUNCTION category_check() RETURNS TRIGGER AS $$
 DECLARE 
 cat_id text;
@@ -14,7 +16,7 @@ BEGIN
 
     SELECT p.category_id INTO cat_id
     FROM Product AS p
-    WHERE p.product_code = NEW.product_code;
+    WHERE p.product_code = NEW.product_code; 
 
     PERFORM * FROM Belong1 AS b
     WHERE b.email = NEW.email AND b.category_id = cat_id;
@@ -31,8 +33,11 @@ CREATE TRIGGER sell_check BEFORE INSERT -- Constraint 4
 ON Sell
     FOR EACH ROW
 EXECUTE PROCEDURE category_check();
-
--- Constraint 6 and 10
+/*
+Constraints 6 and 10:
+Constraints 6 ensure that the quantity attribute of an order must be less or equal to the stock value of the relative products.
+Constraints 10 ensure that when a order is correctly submited  the  stock attribute is updated
+*/
 CREATE FUNCTION cancel_order(id INT) RETURNS void AS $$ 
     BEGIN
         DELETE FROM Orders
@@ -81,8 +86,9 @@ ON Contain
     FOR EACH ROW
 EXECUTE PROCEDURE quantity_check();
 
-
---Constraint 8
+/*
+Constraint 8: the promote relation have to be consistent, the same product_code - email pair must exist also in the sell relation
+*/
 CREATE FUNCTION promote_check() RETURNS TRIGGER AS $$
 
     BEGIN
@@ -105,8 +111,9 @@ ON Promote
     FOR EACH ROW
 EXECUTE PROCEDURE promote_check();
 
-
---Constraint 11
+/*
+Constraint 11: when an order status is update from "Reserved" to "Canceled", the products stocks are restored 
+*/
 CREATE FUNCTION order_status_check() RETURNS TRIGGER AS $$
     DECLARE
     qnt_to_increase INT;

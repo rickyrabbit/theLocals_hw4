@@ -169,7 +169,7 @@ public class UserActions {
 			rs = pstmt.executeQuery();
 
 			if (!rs.isBeforeFirst()){
-				System.out.println("You don't have order with the provided ID, please retry.");
+				System.out.println("You haven't any order with the provided ID, please retry.");
 			} else {
 				System.out.println("Order ID\tProduct Name\tProduct Quantity\tUnit Price\tProducer");
 			}
@@ -319,7 +319,7 @@ public class UserActions {
 			rs = pstmt.executeQuery();
 
 			if (!rs.isBeforeFirst()){
-				System.out.println("You don't have received order with the provided ID, please retry.");
+				System.out.println("You haven't received any order with the provided ID, please retry.");
 			} else {
 				System.out.println("Order ID\tProduct Name\tProduct Quantity\tUnit Price\tProducer");
 			}
@@ -499,7 +499,7 @@ public class UserActions {
 		connect();
 
 		try {
-			System.out.printf("Welcome!");
+			System.out.printf("Welcome!\n");
 			System.out.printf("Please insert your email to login.\n");
 			email = scan.nextLine();
 			while(!checkIfUserExists()) {

@@ -4,6 +4,7 @@
 -----------------------
 -- TRIGGERS CREATION --
 -----------------------
+
 /*
 Constraint 4: Each producer can sell products that belong to the same categories he is associated with.
 This stored procedure check if the inserted category_id of the product matches one of the category_id of the producer. 
@@ -33,6 +34,7 @@ CREATE TRIGGER sell_check BEFORE INSERT -- Constraint 4
 ON Sell
     FOR EACH ROW
 EXECUTE PROCEDURE category_check();
+
 /*
 Constraints 6 and 10:
 Constraints 6 ensure that the quantity attribute of an order must be less or equal to the stock value of the relative products.

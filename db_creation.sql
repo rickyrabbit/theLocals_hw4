@@ -226,7 +226,7 @@ CREATE TABLE Make(
     FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (type) REFERENCES Sales_Channel(type),
     FOREIGN KEY (customer_email) REFERENCES End_User(email),
-    FOREIGN KEY (producer_email) REFERENCES Producer(email) --virgola in più
+    FOREIGN KEY (producer_email) REFERENCES Producer(email)
 );
 COMMENT ON TABLE Make IS 'List of orders made by users of role_type "costumer" from "producers"';
 

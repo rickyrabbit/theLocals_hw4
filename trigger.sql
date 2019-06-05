@@ -146,3 +146,43 @@ CREATE TRIGGER order_status_canceled AFTER UPDATE
 ON Orders
     FOR EACH ROW
 EXECUTE PROCEDURE order_status_check();
+
+
+/*
+Additional Constraint: Each order must contain products sold by one and only one producer.
+*/
+CREATE FUNCTION one_order_one_producer_check() RETURNS TRIGGER AS $$
+    DECLARE
+    p_email text;
+        
+    BEGIN
+        
+        SELECT producer_email INTO p_email
+        FROM Make
+        WHERE order_id = NEW.order_id;
+
+        SELECT * 
+        FROM Sell
+        WHERE email = p_email AND product_code = NEW.product_code;
+
+        IF NOT FOUND THEN -- if the query found 0 rows
+            PERFORM cancel_order(NEW.order_id);
+            RAISE EXCEPTION 'The producer does not sell that product';
+        END IF;
+    
+    END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER one_order_one_producer BEFORE INSERT 
+ON Contain
+    FOR EACH ROW
+EXECUTE PROCEDURE one_order_one_producer_check();
+
+
+
+
+
+
+
+
